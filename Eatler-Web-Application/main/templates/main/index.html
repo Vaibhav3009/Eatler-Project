@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Eatler</title>
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+   <link href="{%static 'img/icon.png' %}" rel="icon">
+  <link href="{%static 'img/icon.png' %}" rel="apple-touch-icon"> 
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i" rel="stylesheet">
+
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'extra/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/venobox/venobox.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+  <!-- Main CSS File -->
+  <link href="{% static 'css/mainstyle.css' %}" rel="stylesheet">
+  <style>
+    .dropdown-menu {
+      background-color: #ffc56e !important;
+    }
+
+    .dropdown:hover>.dropdown-menu {
+
+      display: block;
+    }
+
+    .dropdown:hover>.dropdown-item {
+      background-color: #010101 !important;
+
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Top Bar ======= -->
+  <section id="topbar" class="d-none d-lg-flex align-items-center fixed-top">
+    <div class="container text-right">
+      <i class="icofont-phone"></i> +91 6361905820
+      
+      <!-- <i class="icofont-clock-time icofont-rotate-180"></i> Mon-Sat: 11:00 AM - 23:00 PM -->
+    </div>
+  </section>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+      <div class="logo mr-auto">
+        <h1 class="text-light"><a href="{% url 'main:homepage' %}"><span>Eatler</span></a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li class="active"><a href="{% url 'main:homepage' %}">Home</a></li>
+          <li><a href="" data-toggle="modal" data-target="#myModal">Order Now</a></li>
+
+          <!-- <li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Menu</a>
+                       <div class="dropdown-menu">
+                           <a href="#" class="dropdown-item">Menu1</a>
+                           <a href="#" class="dropdown-item">Menu2</a>
+                           <a href="#" class="dropdown-item">Menu3</a>
+                           <a href="#" class="dropdown-item">Menu4</a>
+                       </div>
+          </li> -->
+
+
+
+
+          <li><a href="#about">About</a></li>
+
+          <!-- <li><a href="#specials">Specials</a></li> -->
+
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#contact">Contact</a></li>
+           <li><a href="#feedback">Feedback</a></li>
+
+          {% if user.is_authenticated %}
+          
+
+
+          <li class="nav-item dropdown"><a href="##" data-toggle="dropdown"><i class="fas fa-user-circle"></i></a>
+            <div class="dropdown-menu">
+              <a href="{% url 'main:user_profile' %}" class="dropdown-item">My Profile</a>
+              <a href="{% url 'accounts:logout' %}" class="dropdown-item">Logout</a>
+            </div>
+          </li>
+          <li><a href="##"><i class="fas fa-shopping-cart"></i></a></li>
+          {% else %}
+          <li><a href="{% url 'accounts:LoginView' %}">Login</a></li>
+          {% endif %}
+
+
+          <li class="book-a-table text-center"><a href="#book-a-table">Download App</a></li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+    <div class="hero-container">
+      <div id="heroCarousel" class="carousel slide carousel-fade" data-ride="carousel">
+
+        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
+
+        <div class="carousel-inner" role="listbox">
+
+          <!-- Slide 1 -->
+          <div class="carousel-item active" style="background: url({% static 'img/slide/slide-1.jpg' %});">
+            <div class="carousel-container">
+              <div class="carousel-content">
+                <h2 class="animated fadeInDown"><span>Eatler</span> </h2>
+                <p class="animated fadeInUp">Wondering how hygienic the food on your platter is? Worry not, because we follow the transparent policy. We let you be the eyes, so you don’t have to see through ours!
+    
+                  </p>
+                <div>
+                  <a href="" class="btn-menu animated fadeInUp scrollto" data-toggle="modal" data-target="#myModal">Order Now</a>
+                  <a href="#book-a-table" class="btn-book animated fadeInUp scrollto">Book a Table</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="carousel-item" style="background: url({% static 'img/slide/slide-2.jpg' %});">
+            <div class="carousel-container">
+              <div class="carousel-content">
+                <h2 class="animated fadeInDown">Eatler</h2>
+                <p class="animated fadeInUp">Food eating is no secret. So why should food making be? Introducing the world’s first transparent eatery, now in India!
+    
+                </p>
+                <div>
+                  <a href="" class="btn-menu animated fadeInUp scrollto" data-toggle="modal" data-target="#myModal">Order Now</a>
+                  <a href="#book-a-table" class="btn-book animated fadeInUp scrollto">Book a Table</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="carousel-item" style="background: url({% static 'img/slide/slide-3.jpg' %});">
+            <div class="carousel-background"><img src="{% static 'img/slide/slide-3.jpg' %}" alt=""></div>
+            <div class="carousel-container">
+              <div class="carousel-content">
+                <h2 class="animated fadeInDown">Eatler</h2>
+                <p class="animated fadeInUp">We give you a double owl vision on what happens between the time that you have ordered food and the moment you take that first crunchy bite. </p>
+                <div>
+                  <a href="" class="btn-menu animated fadeInUp scrollto" data-toggle="modal" data-target="#myModal">Order Now</a>
+                  <a href="#book-a-table" class="btn-book animated fadeInUp scrollto">Book a Table</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon icofont-simple-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+
+        <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon icofont-simple-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+
+      </div>
+    </div>
+  </section><!-- End Hero -->
+
+
+
+
+
+
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+
+    <section id="about" class="about">
+      <div class="container-fluid">
+
+        <div class="row">
+
+          <div class="mx-4 col-lg-5 align-items-stretch video-box" style="background-image: url({%static 'img/eatler.jpg' %});">
+            <a href="https://youtu.be/s4nPptkcYI4" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
+          </div>
+
+          <div class="col-lg-6 d-flex flex-column justify-content-center align-items-stretch">
+
+            <div class="content">
+              <h3>About Us</h3>
+              <p class="font-italic">
+               Eatler India Pvt Ltd is the world's first transparent kitchen brought at your doorstep. Eatler is an efficient food delivery app 
+that not only provides you with food from your favorite restaurants but also gives you  a 360 degree vision of what happens 
+from the moment you crave your favorite food to the time you have it served on your platter. We are an Experience that 
+provides you with Transparency and the best Quality.
+              </p>
+              <ul>
+                <li><i class="bx bx-check-double"></i> Our mission is to become the consumer’s 
+primary choice for on-line food delivery service by providing highest quality natural and organic, hygienic multi-cuisine food thereby satisfying and delighting customers with the experience of well trained delivery professionals. </li>
+                
+                <li><i class="bx bx-check-double"></i> Our vision is to grow with our on-line customers in our targeted markets by providing quality & hygienic multi-cuisine food at affordable prices along with excellent on-time delivery while enhancing our customer’s food delivery choices and experience.</li>
+              </ul>
+              <p>
+                WE PLEDGE TO GIVE BACK YOUR FUNDAMENTAL RIGHT OF KNOWING THE FOOD ON THE PLATTER FROM THE TIME YOU ORDER THEM TO THE TASTE YOU CRAVED FOR .
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Why Us Section ======= -->
+    <section id="why-us" class="why-us">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Why choose <span>Eatler</span></h2>
+          <p>Quality, Hygiene and Transparency is what defines Experience with Eatler. At Eatler, we don’t see our customers as guests, but as one big family. Family is king, and we wish to serve everyone the boss meal!</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4">
+            <div class="box">
+              <span>01</span>
+              <h4>Genuine is rare</h4>
+              <p>It’s like plucking a four leaved clover, or <strong>#MaaKaPyaar, or #GharKaKhaana</strong> Or Eatler. All rare, and all genuine. No compromises!
+
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>02</span>
+              <h4>The most transparent Eatery</h4>
+              <p>It’s not just about being a hunger savior but also about knowing how safe the food for consumption is. Hence, we provide you with a double owl vision to get the experience of knowing your food better.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>03</span>
+              <h4>First Fundamental right</h4>
+              <p>We pledge to give you the right to know your food from the time you have ordered it to the moment it is served on your platter.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Whu Us Section -->
+
+
+
+
+    <!-- ======= Book A Table Section ======= -->
+    <section id="book-a-table" class="book-a-table">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Book a <span>Table</span></h2>
+          <p>Want to book a table? Just write to us at <strong>book@eatler.com</strong></p>
+        </div>
+
+        <form action="{% url 'main:bookTable'%}" method="post" role="form" class="php-email-form" autocomplete="off">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="col-lg-6 col-md-6 form-group">
+              <select class="custom-select custom-select-sm" id="select_city_book" name="book_city" required>
+                <option selected disabled>Select your city</option>
+                {% for item in city_list %}
+                <option value="{{item}}" class="cities" >{{item}}</option>
+                {% endfor %}
+              </select>
+
+              <div class="validate"></div>
+            </div>
+            <div class="col-lg-6 col-md-6 form-group">
+              <select class="custom-select custom-select-sm" id="city_wise_restaurant" name="city_wise_restaurant" required>
+                <option selected disabled>Select Restaurant </option>
+              </select>
+
+
+            </div>
+            <div class="col-lg-4 col-md-6 form-group">
+              <input type="text" name="book_name" class="form-control" id="book_name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required>
+              <div class="validate"></div>
+            </div>
+            <div class="col-lg-4 col-md-6 form-group">
+              <input type="email" class="form-control" name="book_email" id="book_email" placeholder="Your Email(Optional)" data-rule="email" data-msg="Please enter a valid email" required>
+              <div class="validate"></div>
+            </div>
+            <div class="col-lg-4 col-md-6 form-group">
+              <input type="tel" class="form-control" name="book_phone" id="book_phone" placeholder="Your Phone" data-rule="minlen:4" data-msg="Please enter at least 4 chars" pattern="[0-9]{10}" required>
+              <div class="validate"></div>
+            </div>
+            <div class="col-lg-4 col-md-6 form-group">
+              <small>Date</small>
+              <input type="date" class="form-control" id="book_date" name="book_date" placeholder="Date" data-rule="minlen:4" data-msg="Please enter at least 4 chars"required >
+
+              <div class="validate"></div>
+            </div>
+            <div class="col-lg-4 col-md-6 form-group">
+              <small>Time</small>
+              <input type="time" class="form-control" id="book_time" name="book_time"  min="09:00:00" max="23:00:00" placeholder="Time" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required>
+              <div class="validate"></div>
+            </div>
+            <div class="col-lg-4 col-md-6 form-group">
+              <small>Number of People</small>
+              <input type="number" class="form-control" name="book_people" id="book_people" placeholder="# of people" data-rule="minlen:1" data-msg="Please enter at least 1 chars" required>
+              <div class="validate"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" name="book_message" rows="5" placeholder="Message"></textarea>
+            <div class="validate"></div>
+          </div>
+          <div class="mb-3">
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!</div>
+          </div>
+          <div class="text-center"><button type="submit">Send Message</button></div>
+        </form>
+
+      </div>
+    </section><!-- End Book A Table Section -->
+
+    <!-- ======= Gallery Section ======= -->
+    <section id="gallery" class="gallery">
+      <div class="container-fluid">
+
+        <div class="section-title">
+          <h2>Some photos from <span>Our Restaurant</span></h2>
+          <p>A glimpse of our company's Kitchen, Products and Chefs in one frame...</p>
+        </div>
+
+        <div class="row no-gutters">
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g1.jpg' %}" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g1.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g2.jpg' %}" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g2.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g3.jpg' %}" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g3.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g4.jpg' %}.jpg" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g4.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g5.jpg' %}" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g5.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g6.jpg' %}" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g6.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g7.jpg' %}" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g7.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item">
+              <a href="{% static 'img/gallery/g8.jpg' %}" class="venobox" data-gall="gallery-item">
+                <img src="{% static 'img/gallery/g8.jpg' %}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Gallery Section -->
+
+
+
+    <!-- ======= Testimonials Section ======= -->
+    <section id="testimonials" class="testimonials">
+      <div class="container">
+
+        <div class="owl-carousel testimonials-carousel">
+
+          <div class="testimonial-item">
+            <img src="{% static 'img/testimonials/abhishek-pandey.png' %}" class="testimonial-img" alt="">
+            <h3>Abhishek Panday</h3>
+            <h4>Ceo &amp; Founder</h4>
+          
+            <p>
+              <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+              IIM Lucknow/Co-Founder of the World’s First Transparent Multicuisine Eatery(Now in India)
+              <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+            </p>
+          </div>
+
+          <div class="testimonial-item">
+            <img src="{% static 'img/testimonials/testimonials-2.jpg' %}" class="testimonial-img" alt="">
+            <h3>JYOTSNA DASARI</h3>
+            <h4>Co-Founder</h4>
+            <p>
+              <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+              Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
+              <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+            </p>
+          </div>
+
+         
+
+         
+
+          
+
+        </div>
+
+      </div>
+    </section><!-- End Testimonials Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+
+        <div class="section-title">
+          <h2><span>Contact</span> Us</h2>
+          <p>We are just seconds from you. Feel free to contact us Anytime and Anywhere....</p>
+        </div>
+      </div>
+
+      <div class="map">
+        <!-- <iframe style="border:0; width: 100%; height: 350px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" allowfullscreen></iframe> -->
+        
+          <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15558.36000172046!2d77.766845!3d12.869737!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x737df49c80f7ddcb!2sDasta%20Concerto!5e0!3m2!1sen!2sus!4v1592162746560!5m2!1sen!2sus" width="600" height="450" frameborder="0" style="border:0;width: 100%; height: 350px" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+      </div>
+
+      <div class="container mt-5">
+
+        <div class="info-wrap">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 info">
+              <i class="icofont-google-map"></i>
+              <h4>HeadQuater Location:</h4>
+              <p>SARJAPURA MAIN ROAD<br> Bangalore KA 562125 IN</p>
+            </div>
+
+            <div class="col-lg-3 col-md-6 info mt-4 mt-lg-0">
+              <i class="icofont-clock-time icofont-rotate-90"></i>
+              <h4>Open Hours:</h4>
+              <p>Monday-Saturday:<br>11:00 AM - 23:00 PM</p>
+            </div>
+
+            <div class="col-lg-3 col-md-6 info mt-4 mt-lg-0">
+              <i class="icofont-envelope"></i>
+              <h4>Email:</h4>
+              <p>eatler@india.com<br>contact@eatler.com</p>
+            </div>
+
+            <div class="col-lg-3 col-md-6 info mt-4 mt-lg-0">
+              <i class="icofont-phone"></i>
+              <h4>Call:</h4>
+              <p>+91 6361905820<br>+91 7777777777</p>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <form action="{% url 'main:sendemail' %}" enctype="multipart/form-data"  method="post" role="form" class="php-email-form" autocomplete="off">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="col-md-6 form-group">
+              <input type="text" name="name" class="form-control" id="name" placeholder="First Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+              <div class="validate"></div>
+            </div>
+            <div class="col-md-6 form-group">
+              <input type="text" name="lastname" class="form-control" id="name2" placeholder="Last Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+              <div class="validate"></div>
+            </div>
+          </div>
+           <div class="form-row">
+            <div class="col-md-6 form-group">
+              <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+              <div class="validate"></div>
+            </div>
+             <div class="col-md-6 form-group">
+              <input type="text"  class="form-control" data-rule="minlen:4" maxlength="10" name="phone" class="form-control" placeholder="Your Phone *" value="" />
+               <div class="validate"></div>
+          </div>
+        </div>
+         <div class="form-group">
+            <select name='category' class="form-control ">
+                <option class="hidden"  selected disabled>Category</option>
+                <option value='Cancellations'>Cancellations</option>
+                <option value='Returns'>Returns</option>
+                <option value='Refunds'>Refunds</option>
+            </select>
+        </div>
+
+
+            <div class="form-group">
+            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject(Optional)" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+            <div class="validateSubject(Optional)
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+            <div class="validate"></div>
+          </div>
+      <div class="input-group">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+  </div>
+  <div class="custom-file">
+    <input type="file" name='file' class="custom-file-input" id="inputGroupFile01"
+      aria-describedby="inputGroupFileAddon01">
+    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+  </div>
+</div>
+         
+          <div class="mb-3">
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your message has been sent. Thank you!</div>
+          </div>
+          <div class="text-center"><button type="submit">Send Message</button></div>
+        </form>
+
+
+
+        
+    </section><!-- End Contact Section -->
+
+
+
+
+     <!-- ======= Feedback Section ======= -->
+    <section id="feedback" class="contact">
+      <div class="container">
+
+        <div class="section-title">
+          <h2><span>Feedback</span> </h2>
+          <p>Eatler doesn’t ask questions, Eatler understands.</p>
+        </div>
+      </div>
+
+      
+
+      <div class="container mt-5">
+        <form action="{% url 'main:sendfeedback' %}" method="post" role="form" class="php-email-form" autocomplete="off">
+          {% csrf_token %}
+        
+         <div class="form-group">
+            <select name='feedback_category' class="form-control" required>
+                <option class="hidden"  selected disabled>Category</option>
+                <option value='Delivery Related'>Delivery Related</option>
+                <option value='Food'>Food</option>
+                <option value='Restaurant'>Restaurant</option>
+                <option value='Health and Hygiene'>Health and Hygiene</option>
+                <option value='Technical'>Technical</option>
+                <option value='Overall Experience'>Overall Experience</option>
+            </select>
+        </div>           
+          <div class="form-group">
+            <textarea class="form-control" name="feedback_message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+            <div class="validate"></div>
+          </div>    
+          <div class="mb-3">
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your message has been sent. Thank you!</div>
+          </div>
+          <div class="text-center"><button type="submit">Send Message</button></div>
+        </form>
+
+
+
+        
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <h3>Eatler</h3>
+      <p>100% genuine, 100% rare, 100% Eatler!</p>
+      <div class="social-links">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; Copyright <strong><span>Eatler</span></strong>. All Rights Reserved
+      </div>
+
+    </div>
+  </footer><!-- End Footer -->
+
+
+  <!--Modal Pop up  -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Order Here</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form action="{% url 'main:menu' %}" method="post" autocomplete="off">
+          {% csrf_token %}
+          <!-- Modal body -->
+          <div class="modal-body">
+            <!-- Default inline 1-->
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="delivery" onclick="choose()" name="delivery-takeaway" value="0" checked>
+              <label class="custom-control-label" for="delivery">Delivery</label>
+            </div>
+
+            <!-- Default inline 2-->
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="takeaway" onclick="choose()" name="delivery-takeaway" value="1">
+              <label class="custom-control-label" for="takeaway">Takeaway</label>
+            </div>
+
+            <br><br>
+            <div style="text-align:center;">
+              <select class="custom-select custom-select-sm" id="select_city" name="city" required>
+                <option selected disabled>Select your city</option>
+                {% for item in city_list %}
+                <option value="{{item}}" class="cities" >{{item}}</option>
+                {% endfor %}
+              </select>
+              <br><br>
+              <select class="custom-select custom-select-sm" id="test" name="locality" required>
+                <option selected disabled>Select your nearby locality</option>
+              </select>
+            </div>
+
+
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <!-- <input type="submit" name="" value="Proceed"> -->
+            <button type="submit" class="btn btn-danger">Proceed</button>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--Chatbot  -->
+  <div class="container">
+      <div class="row">
+          <div id="Smallchat">
+              <div class="Layout Layout-open Layout-expand Layout-right" style="background-color: #fffaf3;color: rgb(255, 255, 255);opacity: 5;border-radius: 10px;">
+                  <div class="Messenger_messenger">
+                      <div class="Messenger_header" style="background-color:#ffbe33; color: rgb(255, 255, 255);">
+                           <h4 class="Messenger_prompt">Eatler</h4>  <span class="chat_close_icon"><i class="fa fa-window-close" aria-hidden="true"></i></span>
+                      </div>
+                      <div class="Messenger_content">
+                          <div class="Messages">
+                              <div class="Messages_list" id="message_list"></div>
+                          </div>
+                          <div class="Input Input-blank">
+                              <textarea class="Input_field" id="message" value="" placeholder="Send a message..." style="height: 20px;"></textarea>
+                              
+                              <button class="Input_button Input_button-send" id="send-btn">
+                                  <div class="Icon" style="width: 18px; height: 18px;">
+                                      <svg width="57px" height="54px" viewbox="1496 193 57 54" version="1.1"
+                                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                      style="width: 18px; height: 18px;">
+                                          <g id="Group-9-Copy-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                          transform="translate(1523.000000, 220.000000) rotate(-270.000000) translate(-1523.000000, -220.000000) translate(1499.000000, 193.000000)">
+                                              <path d="M5.42994667,44.5306122 L16.5955554,44.5306122 L21.049938,20.423658 C21.6518463,17.1661523 26.3121212,17.1441362 26.9447801,20.3958097 L31.6405465,44.5306122 L42.5313185,44.5306122 L23.9806326,7.0871633 L5.42994667,44.5306122 Z M22.0420732,48.0757124 C21.779222,49.4982538 20.5386331,50.5306122 19.0920112,50.5306122 L1.59009899,50.5306122 C-1.20169244,50.5306122 -2.87079654,47.7697069 -1.64625638,45.2980459 L20.8461928,-0.101616237 C22.1967178,-2.8275701 25.7710778,-2.81438868 27.1150723,-0.101616237 L49.6075215,45.2980459 C50.8414042,47.7885641 49.1422456,50.5306122 46.3613062,50.5306122 L29.1679835,50.5306122 C27.7320366,50.5306122 26.4974445,49.5130766 26.2232033,48.1035608 L24.0760553,37.0678766 L22.0420732,48.0757124 Z"
+                                              id="sendicon" fill="#96AAB4" fill-rule="nonzero" />
+                                          </g>
+                                      </svg>
+                                  </div>
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!--===============CHAT ON BUTTON STRART===============-->
+              <div class="chat_on" id="chatbot-btn" style="background-color:#ffbe33; color: rgb(255, 255, 255);"> <span class="chat_on_icon"><i class="fa fa-comments" aria-hidden="true"></i></span>
+              </div>
+              <!--===============CHAT ON BUTTON END===============-->
+          </div>
+      </div>
+  </div>
+  <!--chabot ends  -->
+
+
+
+
+
+  <!-- <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a> -->
+
+  <!-- Vendor JS Files -->
+
+  <script src="{% static 'extra/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'extra/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'extra/jquery.easing/jquery.easing.min.js' %}"></script>
+  <script src="{% static 'extra/jquery-sticky/jquery.sticky.js' %}"></script>
+  <script src="{% static 'extra/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'extra/venobox/venobox.min.js' %}"></script>
+  <script src="{% static 'extra/owl.carousel/owl.carousel.min.js' %}"></script>
+
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'js/mainmain.js' %}"></script>
+  <script type="text/javascript">
+ 
+     
+
+    window.onload=function(){
+
+      window.localStorage.clear()
+    }
+
+// select city and render their locality 
+element = document.getElementById('select_city');
+element.addEventListener('change', function() {
+
+      var select1 = document.getElementById('test')
+      var node = document.getElementById("test");
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+      var temp = document.getElementById('select_city')
+      var city = temp.options[temp.selectedIndex].value
+      var list = "{{locality_list | escapejs}}"
+
+      var parsed = JSON.parse(list)
+
+      var listItem = parsed[city]
+      select1.options[select1.options.length] = new Option("Select Your Locality")
+      select1.options[0].disabled = true
+      for (var i = 0; i < listItem.length; i++) {
+        select1.options[select1.options.length] = new Option(listItem[i], listItem[i]);
+      }
+   
+});
+
+// select city and render their restaurant  
+element1 = document.getElementById('select_city_book');
+element1.addEventListener('change', function() {
+
+      var select1 = document.getElementById('city_wise_restaurant')
+      var node = document.getElementById("city_wise_restaurant");
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+      var temp = document.getElementById('select_city_book')
+      var city = temp.options[temp.selectedIndex].value
+      var list = "{{city_wise_restaurant | escapejs}}"
+
+      var parsed = JSON.parse(list)
+
+      var listItem = parsed[city]
+      select1.options[select1.options.length] = new Option("Select Restaurant")
+      select1.options[0].disabled = true
+      for (var i = 0; i < listItem.length; i++) {
+        select1.options[select1.options.length] = new Option(listItem[i], listItem[i]);
+      }
+   
+});
+
+
+   // $
+  </script>
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+    $(".chat_on").click(function(){
+        $(".Layout").toggle();
+        $(".chat_on").hide(300);
+    });
+
+       $(".chat_close_icon").click(function(){
+        $(".Layout").hide();
+           $(".chat_on").show(300);
+    });
+
+  });
+  const callback = function () {
+    let messages = document.getElementById('message_list');
+    setTimeout(() => {
+        messages.scrollTop = messages.scrollHeight;
+    }, 1);
+}
+
+ 
+  $("#chatbot-btn").click(function(){
+    message='chatbot_active'
+    console.log(message)
+    $.ajax({
+      type:'POST',
+      url:"{% url  'main:integration' %}",
+      data:{'message':JSON.stringify(message)},
+      dataType:'json',
+      success:function(response){
+        console.log(response)
+        console.log(response['reply']['text'])
+        if(response['reply']['status']=='0')
+        {
+          
+          window.location.href=response['reply']['url']
+        }
+
+        button=response['reply']['Buttons'];
+        document.getElementById('message_list').innerHTML='<p style="color:black;background:#FDA50F;padding:15px;border-radius:11px;">'+response['reply']['text']+'</p>'
+
+        callback();
+        document.getElementById('message_list').innerHTML+='<br><br>'
+        for(var i=0;i<button.length;i++)
+        {
+          document.getElementById('message_list').innerHTML+=`<div><button id="${button[i]}" class="btn btn-warning my-1 button_in_chatbot" style="border-radius:30px;">${button[i]}</button></div><br>`;
+
+        }
+        callback();
+        document.getElementById('message_list').innerHTML+='<br><br>'
+        callback();
+
+      }
+    });
+  });
+
+
+
+  $("#send-btn").click(function(){
+    message=document.getElementById('message').value;
+    document.getElementById('message_list').innerHTML+='<p style="color:black;align-self: flex-end;background:#EF7215;border-radius:11px;padding:15px;">'+message+'</p><br><br>'
+    callback();
+    document.getElementById('message').value=""
+    console.log(message);
+    $.ajax({
+      type:'POST',
+      url:"{% url  'main:integration' %}",
+      data:{'message':JSON.stringify(message)},
+      dataType:'json',
+      success:function(response){
+          console.log(response)
+          if(response['reply']['status']=='0')
+          {
+            
+            window.location.href=response['reply']['url']
+          }
+
+          else{
+            button=response['reply']['Buttons'];
+          document.getElementById('message_list').innerHTML+='<p style="color:black;background:#FDA50F;padding:15px;border-radius:11px;">'+response['reply']['text']+'</p><br><br>'
+          callback();
+          for(var i=0;i<button.length;i++)
+            {
+              document.getElementById('message_list').innerHTML+=`<div><button id="${button[i]}" class="btn btn-warning my-1 button_in_chatbot" style="border-radius:30px;">${button[i]}</button></div><br>`;
+
+            }
+          callback();
+          document.getElementById('message_list').innerHTML+='<br><br>'
+          callback();
+        }
+      }
+    });
+
+  });
+  $(document).on('keypress',function(e) {
+    if(e.which == 13) {
+      $("#send-btn").click();
+}});
+
+
+  $(document).on("click","button.button_in_chatbot",function(){
+    message=document.getElementById(this.id).innerHTML;
+    console.log(message)
+    document.getElementById('message_list').innerHTML+='<p style="color:black;align-self:flex-end;background:#EF7215;border-radius:11px;padding:15px;">'+message+'</p><br><br>'
+    callback();
+    $.ajax({
+      type:'POST',
+      url:"{% url  'main:integration' %}",
+      data:{'message':JSON.stringify(message)},
+      dataType:'json',
+      success:function(response){
+        console.log(response)
+        if(response['reply']['status']=='0')
+          {
+            
+            window.location.href=response['reply']['url']
+          }
+        document.getElementById('message_list').innerHTML+='<p style="color:black;background:#FDA50F;padding:15px;border-radius:11px;">'+response['reply']['text']+'</p><br><br>'
+
+      callback();
+            button=response['reply']['Buttons'];
+            for(var i=0;i<button.length;i++)
+            {
+              document.getElementById('message_list').innerHTML+=`<div><button id="${button[i]}" class="btn btn-warning my-1 button_in_chatbot" style="border-radius:30px;">${button[i]}</button></div><br>`;
+
+            }
+            callback();
+            document.getElementById('message_list').innerHTML+='<br><br>'
+            callback();
+    }
+
+});
+  });
+
+
+$(document).ready(function () {
+        var today = new Date();
+        var day=today.getDate()>9?today.getDate():"0"+today.getDate(); // format should be "DD" not "D" e.g 09
+        var month=(today.getMonth()+1)>9?(today.getMonth()+1):"0"+(today.getMonth()+1);
+        var year=today.getFullYear();
+        var date = day + "/" + month+"/"+year;
+        $("#book_date").attr('min', year + "-" + month + "-" + day);
+        var day=(today.getDate()+7)>9?(today.getDate()+7):"0"+(today.getDate()+7);
+        $("#book_date").attr('max', year + "-" + month + "-" + day);
+
+        
+
+        var hour = today.getHours(),
+            min  = today.getMinutes();
+            sec = today.getSeconds();
+
+        hour = (hour < 10 ? "0" : "") + hour;
+        min = (min < 10 ? "0" : "") + min;
+        sec = (sec < 10 ? "0" : "") + sec;
+
+
+        var displayTime = hour + ":" + min+":"+sec;
+        console.log(displayTime)
+        // var date_time=date+''+displayTime
+        var date_time=date+" "+'23:00:01'
+        console.log(date_time)
+        if(Date.parse(date_time)<Date.parse(date+' 09:00:00') )
+        {
+          console.log("here")
+          $("#book_time").attr('min', '09:00:00');
+
+        }
+        else if(Date.parse(date_time)>=Date.parse(date+' 23:00:00') )
+        {
+          console.log('insde big')
+          day=(today.getDate()+1)>9?(today.getDate()+1):"0"+(today.getDate()+1);
+          $("#book_date").attr('min', year + "-" + month + "-" + day);
+          var day=(today.getDate()+8)>9?(today.getDate()+8):"0"+(today.getDate()+8);
+          $("#book_date").attr('max', year + "-" + month + "-" + day);
+          $("#book_time").attr('min', '09:00:00');
+
+        }
+       
+         else
+        {
+          $("#book_time").attr('min', hour + ":" + min + ":" + sec);
+
+        }
+
+
+        
+        
+
+
+});
+
+
+  </script>
+
+</body>
+
+</html>
+

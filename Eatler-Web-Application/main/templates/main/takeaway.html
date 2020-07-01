@@ -1,0 +1,47 @@
+{% extends "main/mainbase.html"%}
+{% block content %}
+  <style>
+  .card{
+  margin: 10px auto;
+  float: none;
+  margin-bottom: 10px;
+  }
+  </style>
+  <br><br><br><br><br>
+  <div class="container">
+    <div class="restaurant-list">
+      {% for item in restaurant%}
+        <div class="card mb-3" style="max-width: 80%;">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src="/media/{{item.photo}}" class="card-img" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.description}}</p>
+                <p class="card-text">Address : {{item.address}}</p>
+                <p class="card-text">City : {{item.city}}</p>
+                <p class="card-text">Contact Number : {{item.contact_number}}</p>
+                <p class="card-text"><small class="text-muted">  <a class="btn btn-success" href="{% url 'main:restaurant_menu' pk=item.pk %}">View Menu</a> </small></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+      {% endfor %}
+    </div>
+  </div>
+  <br>
+  {% block js %}
+    <script type="text/javascript">
+    $(document).ready(function(){
+    if(localStorage.getItem('method')==null){
+    var method = '{{ method}}'
+    localStorage.setItem('method',method);
+    }
+    
+    });
+    </script>
+  {% endblock %}
+{% endblock content %}

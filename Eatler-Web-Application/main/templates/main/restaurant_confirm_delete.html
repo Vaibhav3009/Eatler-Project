@@ -1,0 +1,38 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block body %}
+<style>
+    .container{
+    align-items:center;
+    justify-content:center;
+    display:flex;
+    }
+    body{
+      background:#e9ecef;
+        margin:0 auto;
+    }
+    .fff{
+      background:white;
+      width:40%;
+      height:40%;
+      margin-top:50px;
+    }
+}
+</style>
+<div class="container" style="height:100%; width:100%; margin:auto;">
+
+  <div class="fff" style="text-align:center;">
+    <h5 class="card-title my-2 mx-2">Delete {{restaurant.name}}?</h5>
+  <div class="card-body">
+    <form method="post">
+      {%csrf_token%}
+      <input type="submit" class="btn btn-danger" value="Delete">
+      <a   class="btn btn-warning" href="{%url 'main:list_restaurant'%}">Cancel</a>
+    </form>
+  </div>
+</div>
+
+
+</div>
+{% endblock%}

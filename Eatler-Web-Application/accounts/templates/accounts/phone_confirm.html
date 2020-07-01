@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Eatler</title>
+
+    <link rel="stylesheet" href="{% static 'css/phone_confirm.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+    </head>
+
+  <body>
+<div class="jumbotron">
+
+    <div class="container">
+
+      <div class="col-sm-6 col-sm-offset-3">
+
+
+      {% block content %}
+
+
+      <div class="container">
+        <div class="img">
+          <img src="{% static 'images/food1.jpg' %}">
+        </div>
+
+
+        <div class="login-content">
+
+
+
+      <form class="form-inline" id="login_form" method="POST" action="{% url "accounts:phone_verification_url" phone_number=userr.phone_number country_code=userr.country_code full_name=userr.full_name %}" >
+        {% csrf_token %}
+        <img src="{% static 'images/avatar.svg' %}">
+        <h3 class="title">Confirm your phone number  {{userr.phone_number}}</h3>
+        <br>
+
+
+        <!-- <input type='hidden' name='username' value='{{user.username}}' />
+
+        <div class="form-group{% if form.one_time_password.errors %} has-error{% endif %}">
+          <label class="control-label" for="id_one_time_password">One Time Password</label>
+          <div class="input-group input-group-lg">
+
+          </div>
+          <input class="form-control input-lg" id="id_one_time_password" name="one_time_password" type="password" required />
+          <div class="error-block">{{ form.one_time_password.errors }}</div>
+        </div> -->
+        <input type='hidden' name='phone_number' value='{{userr.phone_number}}' />
+
+        <div class="form-group{% if form.one_time_password.errors %} has-error{% endif %}">
+          <label class="control-label" for="id_one_time_password">One Time Password</label>
+          <div class="input-group input-group-lg">
+
+          </div>
+          <input class="form-control input-lg input" id="id_one_time_password" name="one_time_password" type="password" required />
+          <div class="error-block">{{ form.one_time_password.errors }}</div>
+        </div>
+
+
+        <button type="submit" name="register" class="btn btn-primary btn-lg " >
+        Confirm
+      </button>
+
+
+
+        {% if messages %}
+        <div id="messages">
+          {% for message in messages %}
+          <div class="alert alert-dismissible alert-info"
+               role="alert">
+            <button type="button" class="close" data-dismiss="alert"
+                    aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message|escape }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+
+        <p class="text-center">
+        Didn't recieve one time password?   <a   style="text-align:center" href="{% url "accounts:resend_url" phone_number=userr.phone_number country_code=userr.country_code full_name=userr.full_name %}"><h4>Resend OTP</h4></a>
+        </p>
+
+
+      </form>
+    </div>
+
+    </div>
+      {% endblock %}
+</div>
+    </div> <!-- /container -->
+
+  </div>
+
+  </body>
+</html>

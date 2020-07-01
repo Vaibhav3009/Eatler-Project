@@ -1,0 +1,196 @@
+{% extends 'main/mainbase.html' %}
+{% load static %}
+{% block content %}
+<br><br><br><br>
+<div class="container">
+    <form action="{% url 'main:user_profile'%}" enctype="multipart/form-data" id="registrationForm" method="post">
+{% csrf_token %}
+
+    <div class="row">
+
+
+
+
+        <div class="col-sm-3"><!--left col-->
+        <div class="text-xs-center">
+            <div style="text-align: center;">
+                <h4>{{data.full_name}}</h4>
+                <img src="/media/{{userInfo.photo}}"  class="avatar img-circle img-thumbnail" alt="NA">
+                
+                <h6>Upload a different photo...</h6>
+                <input type="file" id="id_photo" name="photo" class="text-xs-center mx-auto file-upload">
+            </div><br>
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-xs-right"><span class="float-xs-left"><strong>Total Orders</strong></span> {{total_orders}}</li>
+                <li class="list-group-item text-xs-right"><span class="float-xs-left"><strong>Address Saved</strong></span> {{total_address}}</li>
+                <li class="list-group-item text-xs-right"><span class="float-xs-left"><strong>Refer Here</strong></span> </li>
+            </ul>
+            
+        </div>
+        
+        
+        </div><!--/col-3-->
+        <div class="col-sm-9">
+            <!-- <ul class="nav nav-tabs">
+                <li class="active mx-4 my-4"><a data-toggle="tab" href="#home" style="font-weight: bolder;">Personal Information</a></li>
+                <li class="mx-4 my-4"><a data-toggle="tab" href="#orders" style="font-weight: bolder;">Order History</a></li>
+                <li class="mx-4 my-4"><a data-toggle="tab" href="#addresses" style="font-weight: bolder;">Saved Addresses</a></li>
+            </ul> -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <ul class="navbar-nav mr-auto nav nav-tabs">
+                    <li class="nav-item active mx-4">
+                        <a class="nav-link" data-toggle="tab" href="#home">Personal Information </a>
+                    </li>
+                    <li class="nav-item mx-4">
+                        <a class="nav-link" data-toggle="tab" href="#orders">Order History</a>
+                    </li>
+                    <li class="nav-item mx-4">
+                        <a class="nav-link" data-toggle="tab" href="#addresses">Saved Addresses</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <br>
+                    <div class="form" >
+                       
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="full_name"><h4>Full name</h4></label>
+                                <input type="text" class="form-control" name="full_name" id="full_name" placeholder="full name" title="enter your first name if any." value="{{data.full_name}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="email"><h4>Email</h4></label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email." value="{{userInfo.email}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button id="{{data.pk}}" class="btn btn-lg btn-success float-xs-right save-form" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    </div><!--/tab-pane-->
+                    
+                    <div class="tab-pane" id="orders">
+                        <div class="">
+                            <br>
+                            <h2>Your Orders</h2>
+                            {% for item in orders %}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div style="width: 50%;float: left;">
+                                            Order ID : {{item.order_id}}
+                                        </div>
+                                        <div style="float: right;">
+                                            Placed from {{item.restaurant.name}}
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        {% for innerkey,inneritem in product_list.items %}
+                                            {% if innerkey == item.order_id %}
+                                                {% for iikey,iiitem in inneritem.items%}
+                                                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h5 class="mb-1">{{ iiitem.product_name }}</h5>
+                                                            <small class="text-muted">Qty: {{iiitem.quantity}}</small>
+                                                        </div>
+                                                        <!-- <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> -->
+                                                        {% if iiitem.add_on1%}
+                                                            <small class="text-muted">{{iiitem.add_on1}}</small>
+                                                        {% endif %}
+                                                        {% if iiitem.add_on2%}
+                                                            <small class="text-muted">{{iiitem.add_on2}}</small>
+                                                        {% endif %}
+                                                        {% if iiitem.add_on4%}
+                                                            <small class="text-muted">{{iiitem.add_on3}}</small>
+                                                        {% endif %}
+                                                        {% if iiitem.add_on4%}
+                                                            <small class="text-muted">{{iiitem.add_on4}}</small>
+                                                        {% endif %}
+                                                        {% if iiitem.add_on5%}
+                                                            <small class="text-muted">{{iiitem.add_on5}}</small>
+                                                        {% endif %}
+                                                    </a>
+                                                {% endfor %}
+                                            {% endif%}
+                                        {% endfor %}
+                                        <blockquote class="blockquote mb-0">
+                                            <footer class="footer">
+                                                <div style="width: 50%;float: left;">
+                                                    <small> Placed On {{item.order_date}} at {{item.order_time}}</small>
+                                                </div>
+                                                <div style="float: right;">
+                                                    <small> Total Price :&#x20B9;{{item.total_price}} </small>
+                                                </div>
+                                            </footer>
+                                        </blockquote>
+                                    </div>
+                                </div>
+                                <br>
+                            {% endfor %}
+                        </div>
+                        <hr>
+                        </div><!--/tab-pane-->
+                        <div class="tab-pane" id="addresses">
+                            
+                            <div class="row px-4">
+                                
+                                {% for item in address %}
+                                    <div id="add{{item.pk}}">
+                                        <div class="card mx-4 my-2" style="width: 18rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title"></h5>
+                                                <p class="card-text">{{item.address}}</p>
+                                                <div style="display: inline;text-align:center;">
+                                                    <a href="#" id="{{item.pk}}"class="btn btn-danger delete"><small>Delete Address</small></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                {% endfor %}
+                                <br>
+                            </div>
+                            
+                            <hr>
+                            </div><!--/tab-pane-->
+                            </div><!--/tab-content-->
+                        </div>
+                    
+                    </div>
+                    </form>
+                </div>
+                <br><br>
+
+                {% endblock%}
+{% block js %}
+    <script type="text/javascript">
+    
+    $(document).on('click','a.delete',function(){
+    id=this.id;
+    console.log(id)
+    $.ajax({
+    type:'POST',
+    url : '{% url "main:deleteAddress" %}',
+    data:{'id':id},
+    dataType:'json',
+    success:function(response)
+    {
+    if(response['success']=='True')
+    {
+    console.log("add"+id)
+    document.getElementById("add"+id).innerHTML=""
+    }
+    }
+    });
+    });
+    
+    
+    </script>
+{% endblock %}

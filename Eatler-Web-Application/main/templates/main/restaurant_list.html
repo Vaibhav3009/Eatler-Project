@@ -1,0 +1,59 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block body %}
+<link href="{% static 'extra/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<style>
+    .container{
+    margin-top:8%;
+    margin-left:8%;
+    }
+    .lob:hover{
+    -webkit-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+    -box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75)
+}
+</style>
+
+
+
+
+<div class="container my-4" style="text-align: center;">
+  <a class="btn btn-success" href="{% url 'main:create_restaurant'%}">Add Restaurant</a>
+</div>
+
+
+
+<div class="card-group" style="text-align:center; align-items:center; justify-content:center;">
+  {%for restaurant in restaurants%}
+   <div class="row menu-container">
+    <div class="product-top" >
+      <div class="col-4-lg ml-3">
+
+        <div class="card lob" style="text-align:center; justify-content:center; align-items:center;">
+        <div class="card-body" >
+          <h5 class="card-title">{{restaurant.name}}</h5>
+          <p class="card-text">Opening time : {{restaurant.open_time}}  Closing time : {{restaurant.close_time}}</p>
+       </div>
+
+        <div class="image" style=" width:200px; height:150px;">
+          <img src="/media/{{ restaurant.photo}}" class="card-img" alt="Responsive image">
+        </div>
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">{{ restaurant.short_description }}</li>
+        </ul>
+        <div class="card-body" style="display:inline">
+          <a class="btn btn-warning" href="{{restaurant.id}}" >View Restaurant</a>
+        </div>
+      </div>
+
+      </div>
+    </div>
+   </div>
+{%endfor%}
+
+</div>
+
+ 
+{% endblock %}

@@ -1,0 +1,769 @@
+{% extends "main/mainbase.html"%}
+{% load static %}
+{% block content%}
+  <style media="screen">
+  .container {
+  max-width: 960px;
+  }
+  .border-top { border-top: 1px solid #e5e5e5; }
+  .border-bottom { border-bottom: 1px solid #e5e5e5; }
+  .border-top-gray { border-top-color: #adb5bd; }
+  .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+  .lh-condensed { line-height: 1.25;padding: 25px; }
+  /*delete style  */
+  .trash {
+  -webkit-transition: opacity 200ms;
+  height: 30px;
+  width: 30px;
+  opacity: 0.8;
+  position: absolute;
+  vertical-align: middle;
+  cursor: pointer;
+  }
+  .trash > .can, .trash > .lid {
+  background: url('{% static 'img/dustbin.png' %}') 0 0 no-repeat;
+  left: 8px;
+  position: absolute;
+  right: 8px;
+  top: 2px;
+  }
+  .trash:hover > .lid {
+  -webkit-transition: -webkit-transform 250ms;
+  }
+  .trash:hover > .lid.rotate {
+  -webkit-transform: rotate(-45deg);
+  }
+  .trash > .lid {
+  -webkit-transform-origin: -7% 100%;
+  -webkit-transition: -webkit-transform 250ms;
+  height: 6px;
+  width: 14px;
+  }
+  .trash > .can {
+  background-position: 0px -4px;
+  height: 16px;
+  width: 13px;
+  margin-top: 5px;
+  }
+  /* End of delete style */
+  /* input number property */
+  .inc{
+  margin:0;
+  width:40px;
+  display:inline;
+  }
+  </style>
+
+  <div class="container my-5">
+    <div class="py-5 text-center">
+      <h2>Checkout</h2>
+      <p class="lead">Eat more, worry less</p>
+    </div>
+    <div class="row">
+      <div class="col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Your cart</span>
+        <span class="badge badge-secondary badge-pill" id="total">Qty</span>
+        </h4>
+        <ul class="list-group mb-3" id='items'>
+          <!-- Your cart items goes here -->
+        </ul>
+        <div class="card p-2" id="special_div" style="display: none;" >
+          <div class="input-group">
+            <textarea class="form-control" id="special_ins" placeholder="Any Special Instruction...."></textarea>
+            
+          </div>
+        </div>
+      </div>
+
+
+        <div class="col-md-8 order-md-1">
+
+          <!-- form 1 -->
+          <div id="send-otp-form">
+                  <form class="needs-validation" >
+                    <div class="mb-3">
+                        <label for="name"> Please Verify Your Number to Proceed Further</label>
+                        <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="" pattern="[0-9]{10}" required>
+                        <div id="otp_not_send" style="display:none;">
+                             OTP could not send..Please check your number and try again!!
+                      </div>
+
+
+                    </div>
+
+                    <button type="button"  class="btn btn-primary btn-lg btn-block send_otp">Send OTP</button>
+                    
+
+                  </form>
+            </div>
+            <!-- form 1 end -->
+            <!-- form 2 start -->
+              <div id="verify-form" style="display:none;">
+                <form class="needs-validation" >
+                  <div class="mb-3">
+                      <label for="otp"> Please Enter OTP to Proceed Further</label>
+                      <input type="text" class="form-control" id="otp" name="otp" placeholder="" pattern="[0-9]{4}" required>
+                      <div id="otp_not_send" style="display:none;">
+                           OTP could not send..Please check your number and try again!!
+                    </div>
+
+
+                  </div>
+
+                  <button type="button"  class="btn btn-primary btn-lg btn-block verify_otp">Verify OTP</button>
+                  <a href="#" id="resend_url" class="resend_url">Resend OTP</a>
+                </form>
+           </div>
+           <!-- form 2 end -->
+
+
+          <!-- form 3 start -->
+
+      <div id="whole-form" style='display:none;'>
+
+        
+        <form class="needs-validation" id="checkout-form"  method="post" action="{% url 'main:chatbotCheckout' %}">
+          {% csrf_token %}
+          <input type="hidden" name="item_jsons" id="item_jsons">
+          <input type="hidden" name="total_price" id="total_price">
+          <input type="hidden" name="method" id="method">
+          <input type="hidden" name="special_instruction" id="special_instruction">
+          <input type="hidden" name="restaurant" value="{{response.restaurant}}">
+          <input type="hidden" name="user_phone_number" id="user_phone_number">
+          <input type="hidden" name="session_id" id="session_id" value="{{response.session_id}}">
+
+         <h4 class="mb-3">Shipping Details</h4>
+
+
+
+          <div class="mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="phone_number">Contact Number</label>
+            <input type="tel" class="form-control" pattern="[0-9]{10}"id="phone_number" name="phone_number" placeholder="" required>
+          </div>
+          <div class="mb-3">
+            <label for="email">Email <span class="text-muted">(Optional)</span></label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+            <div class="invalid-feedback">
+              Please enter a valid email address for shipping updates.
+            </div>
+          </div>
+
+
+
+          <div class="mb-3" id="addressother1" >
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St">
+            <div class="invalid-feedback">
+              Please enter your shipping address.
+            </div>
+          </div>
+
+          <div class="mb-3" id="addressother2" >
+            <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+            <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment or suite">
+          </div>
+
+          <div id="extradiv" >
+
+          <div class="row" >
+            <div class="col-md-5 mb-3">
+              <label for="country">Country</label>
+              <select class="custom-select d-block w-100" id="country" name="country" required>
+                <option value="">Choose...</option>
+                <option value="India">India</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid country.
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="state">State</label>
+              <select class="custom-select d-block w-100" id="state" name="state" required>
+                <option value="">Choose...</option>
+                <option value="Delhi">Delhi</option>
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid state.
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="zip">Zip</label>
+              <input type="text" class="form-control" id="zip" name="zip" placeholder="" required>
+              <div class="invalid-feedback">
+                Zip code required.
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+          <hr class="mb-4">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="different-address" unchecked>
+            <label class="custom-control-label" for="different-address">Different Billing Address?</label>
+          </div>
+          <hr class="mb-4">
+
+          
+          <!--Billing Form Started  -->
+          <hr class="mb-4">
+          <div id="billing-div" style="display: none">
+            
+            <!--Billing Form Started  -->
+            <h4 class="mb-3">Billing address</h4>
+            <div class="mb-3">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" id="address_billing" name="address_billing" placeholder="1234 Main St" required>
+              <div class="invalid-feedback">
+                Please enter your Billing address.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+              <input type="text" class="form-control" id="address2_billing" name="address2_billing" placeholder="Apartment or suite">
+            </div>
+            
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <label for="country">Country</label>
+                <select class="custom-select d-block w-100" id="country_billing" name="country_billing" required>
+                  <option value="">Choose...</option>
+                  <option value="India">India</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please select a valid country.
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="state">State</label>
+                <select class="custom-select d-block w-100" id="state_billing" name="state_billing" required>
+                  <option value="">Choose...</option>
+                  <option value="Delhi">Delhi</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="zip">Zip</label>
+                <input type="text" class="form-control" id="zip_billing" name="zip_billing" placeholder="" required>
+                <div class="invalid-feedback">
+                  Zip code required.
+                </div>
+              </div>
+            </div>
+            <hr>
+          </div>
+
+
+          <!--Billing form ends  -->
+          <!-- Date Time  -->
+          
+          <div class="custom-control custom-checkbox" >
+            <input type="checkbox" class="custom-control-input" id="deliver-now" unchecked>
+            <label class="custom-control-label" for="deliver-now">Do you want to schedule your Order?</label>
+          </div>
+          
+          <hr class="mb-4">
+          <div id="schedule" style="display: none;">
+            <h4 class="mb-3" >Schedule Here</h4>
+            <label>Enter Date and Time <small>(Between 9:00 am to 11:00pm)</small></label>
+            <div class="form-inline">
+              <div class="mb-3 form-group">
+                <input type="date" class="form-control" style=" border-right-style: none" id="date" name="date" placeholder="" >
+              </div>
+              <div class="mb-3 form-group">
+                <input type="time" class="form-control" style=" border-left-style: none" id="time" name="time"  min="09:00:00" max="23:00:00" placeholder="" >
+              </div>
+            </div>
+            
+            <hr class="mb-4">
+          </div>
+          
+          
+          
+          <h4 class="mb-3">Payment</h4>
+          
+          <!-- Material unchecked -->
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="materialUnchecked" name="payment_method" value="pay_online" checked>
+            <label class="form-check-label" for="materialUnchecked">Pay Online</label>
+          </div>
+          <!-- Material checked -->
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="materialChecked" name="payment_method" value="COD" >
+            <label class="form-check-label" for="materialChecked">Pay on Delivery</label>
+          </div>
+          <hr class="mb-4">
+          <button class="btn btn-primary btn-lg btn-block" id="proceed-to-checkout" type="submit">Proceed to checkout</button>
+
+        </form>
+      </div>
+
+      <!-- form 3 ends -->
+
+      
+    </div>
+    </div>
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      <p class="mb-1">&copy; Eatler</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+      </ul>
+    </footer>
+  </div>
+
+
+
+
+
+
+  {% block js%}
+
+
+
+
+  <script>
+
+
+
+
+
+
+
+// if(document.readyState=='loading')
+// {
+//   document.addEventListener('DOMContentLoaded',ready)
+// }
+// else {
+//   ready()
+// }
+
+
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+
+
+
+if(localStorage.getItem('cart')==null){
+var cart={}
+}else{
+  cart=JSON.parse(localStorage.getItem('cart'));
+
+}
+
+if(localStorage.getItem('method')==null)
+{
+  var method={}
+}
+else
+{
+  method=localStorage.getItem('method')
+}
+
+$(document).ready(function(){
+
+var items= "{{response.item_jsons | escapejs}}"
+var method = "{{response.method}}"
+var product_list=JSON.parse(items)
+cart=product_list
+localStorage.setItem('cart',JSON.stringify(cart));
+localStorage.setItem('method',method);
+updateCheckoutCart(cart)
+
+
+ method=localStorage.getItem('method')
+  if(method.length>8)
+    method=method.slice(9,)
+
+
+  var phone_number="";
+
+
+
+});
+
+
+
+
+
+// $(document).ready(function(){
+ 
+
+
+// });
+
+
+
+
+$(document).on('click','button.send_otp',function(){
+  console.log('button clicked')
+  var contact_number = document.getElementById('contact_number').value;
+  console.log(contact_number)
+  document.getElementById('otp_not_send').style.display='none'
+
+   $.ajax({
+      type:'POST',
+      url:"{% url 'main:check_number'%}",
+      data:{'phone_number':contact_number},
+      dataType:'json',
+      success:function(response)
+      {
+        console.log(response)
+        if(response['success']=='False')
+        {
+
+          document.getElementById('otp_not_send').style.display='block'
+
+        }
+        else
+        {
+          document.getElementById('send-otp-form').style.display='none';
+          document.getElementById('verify-form').style.display='block';
+          phone_number=contact_number;
+
+        }
+      }
+  });
+});
+
+$(document).on('click','a.resend_url',function(){
+  console.log('button clicked resend_url')
+  document.getElementById('otp_not_send').style.display='none'
+
+   $.ajax({
+      type:'POST',
+      url:"{% url 'main:check_number'%}",
+      data:{'phone_number':phone_number},
+      dataType:'json',
+      success:function(response)
+      {
+        console.log(response)
+        if(response['success']=='False')
+        {
+
+          document.getElementById('otp_not_send').style.display='block'
+
+        }
+        else
+        {
+          document.getElementById('send-otp-form').style.display='none';
+          document.getElementById('verify-form').style.display='block';
+        }
+      }
+  });
+});
+
+
+$(document).on('click','button.verify_otp',function(){
+  console.log('button clicked verify-form')
+  var otp = document.getElementById('otp').value;
+
+   $.ajax({
+      type:'POST',
+      url:"{% url 'main:verify_otp_number'%}",
+      data:{'otp':otp,'phone_number':phone_number},
+      dataType:'json',
+      success:function(response)
+      {
+        console.log(response)
+        if(response['success']=='False')
+        {
+
+          if(!alert('Invalid OTP Please Verify Again!'))
+            {
+              window.location.reload();
+            }
+
+        }
+        else
+        {
+          document.getElementById('verify-form').style.display='none';
+          document.getElementById('whole-form').style.display='block';
+          document.getElementById('special_div').style.display='block'
+        }
+      }
+  });
+});
+
+
+
+
+
+
+
+
+function updateCheckoutCart(cart)
+{
+  console.log("inside updateCheckoutCart")
+  var totalPrice=0;
+  var totalQty=0;
+  for(var item in cart)
+  {
+    let qty=cart[item][0];
+    let name=cart[item][1];
+    let price=cart[item][2];
+    totalPrice=parseInt(totalPrice)+(parseInt(qty)*parseInt(price));
+    totalQty=parseInt(totalQty)+parseInt(qty)
+    mystr=`<li class="list-group-item d-flex justify-content-between lh-condensed">
+    <div>
+
+    <h6 class="my-0">${name}</h6>
+    <small class="text-muted">&#x20B9;${price} x <small class="changeQuantity"><input type="number" id="inc_dec${item}" class="inc" value=${qty} min=1></small></small>
+
+    </div>
+    <span class="text-muted"><span class="product_price">${parseInt(price)*parseInt(qty)}</span><small id="delete${item}" class="trash" title="rotate"><small class="lid rotate"></small><small class="can px-2"></small></small></span>
+    </li>`
+    $('#items').append(mystr);
+
+    $('#total_price').val(totalPrice);
+  }
+
+
+  var  mystr=` <li class="list-group-item d-flex justify-content-between">
+  <span>Total Amount</span>
+  <strong>&#8377;${totalPrice}</strong>
+  </li>`
+
+  $('#items').append(mystr)
+    // updating Qty() at the top-right corner of cart
+    document.getElementById('total').innerHTML+='('+totalQty+')'
+
+
+    var getInputNumber=document.getElementsByClassName("changeQuantity")
+    for(var i=0;i<getInputNumber.length;i++)
+    {
+      var input=getInputNumber[i]
+      input.addEventListener('change',quantityChanged);
+    }
+  }
+
+// when user want to schedule the delivery
+$(document).ready(function(){
+  $('#deliver-now').click(function(){
+
+      if($('#deliver-now').is(":checked")){
+        document.getElementById('schedule').style.display='block';
+        var x = 'schedule'+'-'+method
+        localStorage.setItem('method',x);
+      }
+      else
+      {
+        document.getElementById('schedule').style.display='none';
+        localStorage.setItem('method',method);
+      }
+  });
+});
+
+
+$("#proceed-to-checkout").click(function(){
+
+
+  if ($('#different-address').is(":checked")) 
+  {
+    console.log("inside different addresss check")
+  }
+
+  else {
+      console.log("inside different addresss uncheck")
+     $('#address_billing').val($('#address').val());
+     console.log($('#address_billing').val())
+     $('#address2_billing').val($('#address2').val());
+     console.log($('#address2_billing').val())
+     $('#zip_billing').val($('#zip').val());
+     console.log( $('#zip_billing').val())
+      var country = $('#country option:selected').val();
+      console.log(country)
+      $('#country_billing option[value="' + country + '"]').prop('selected', true);
+      var state = $('#state option:selected').val();  
+      $('#state_billing option[value=' + state + ']').attr('selected','selected');          
+   }
+
+   
+
+      if($('#deliver-now').is(":checked")){
+
+        console.log('schedule check')
+  
+      }
+
+
+      else
+      {
+        console.log('unchecked')
+        
+        var date = new Date();
+
+        var day = date.getDate(),
+            month = date.getMonth() + 1,
+            year = date.getFullYear(),
+            hour = date.getHours(),
+            min  = date.getMinutes();
+
+        month = (month < 10 ? "0" : "") + month;
+        day = (day < 10 ? "0" : "") + day;
+        hour = (hour < 10 ? "0" : "") + hour;
+        min = (min < 10 ? "0" : "") + min;
+
+        var today = year + "-" + month + "-" + day,
+            displayTime = hour + ":" + min; 
+        console.log(today)
+        console.log(displayTime)
+
+        document.getElementById('date').value = today;      
+        document.getElementById("time").value = displayTime;
+        method=localStorage.getItem('method')
+        if(method.length>8)
+        {
+          method=method.slice(9,)
+        }
+        localStorage.setItem('method',method)
+
+      }
+
+   
+   $('#special_instruction').val($('#special_ins').val());
+   method=localStorage.getItem('method')
+   $("#method").val(method);
+   $("#user_phone_number").val(phone_number);
+   
+
+});
+
+// when billing address is different from shipping address
+$(document).ready(function(){
+  $('#different-address').click(function(){
+    if ($('#different-address').is(":checked")) {//Clear on check
+      $('#address_billing').val("");
+     $('#address2_billing').val("");
+     $('#zip_billing').val("");
+     $('#email_billing').val("");
+     $('#country_billing option[value=""]').attr('selected','selected');
+     $('#state_billing option[value=""]').attr('selected','selected');
+     document.getElementById("billing-div").style.display='block';
+     
+    } else { 
+      
+        document.getElementById("billing-div").style.display='none';
+         $('#address_billing').val($('#address').val());
+         $('#address2_billing').val($('#address2').val());
+         $('#zip_billing').val($('#zip').val());
+        var country = $('#country option:selected').val();
+        $('#country_billing option[value="' + country + '"]').prop('selected', true);
+        var state = $('#state option:selected').val();
+        $('#state_billing option[value=' + state + ']').attr('selected','selected');
+
+   };
+ });
+});
+
+
+$(document).on("click","small.trash",function(){
+  a=this.id.slice(6,)
+  delete cart[a];
+  localStorage.setItem('cart',JSON.stringify(cart));
+  document.getElementById('items').innerHTML=""
+  document.getElementById('total').innerHTML="Qty"
+  updateCheckoutCart(cart)
+  if(Object.keys(cart).length==0)
+  {
+    alert("YOUR CART IS EMPTY!! GO BACK AND ADD ITEM TO THE CART")
+  }
+});
+
+
+
+
+
+function quantityChanged(event)
+{
+  var x=event.target;
+  if(isNaN(x.value) || x.value<=0)
+  {
+    x.value=1;
+  }
+  a=x.id.slice(7,)
+  console.log(a)
+  cart[a][0]=x.value;
+  localStorage.setItem('cart',JSON.stringify(cart));
+  document.getElementById('items').innerHTML=""
+  document.getElementById('total').innerHTML="Qty"
+  updateCheckoutCart(cart)
+}
+
+// $("increment").click()
+
+$("#item_jsons").val(JSON.stringify(cart));
+
+
+
+
+
+
+
+// $(function(){           
+//         if (!Modernizr.inputtypes.date) {
+//             $('input[type=date]').datepicker({
+//                   dateFormat : 'yy-mm-dd'
+//                 }
+//              );
+//         }
+
+//     });
+
+ 
+$(document).ready(function () {
+        var today = new Date();
+        var day=today.getDate()>9?today.getDate():"0"+today.getDate(); // format should be "DD" not "D" e.g 09
+        var month=(today.getMonth()+1)>9?(today.getMonth()+1):"0"+(today.getMonth()+1);
+        var year=today.getFullYear();
+
+        $("#date").attr('min', year + "-" + month + "-" + day);
+        var day=(today.getDate()+2)>9?(today.getDate()+2):"0"+(today.getDate()+2);
+        $("#date").attr('max', year + "-" + month + "-" + day);
+});
+ 
+</script>
+
+<!-- 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js" integrity="sha256-ifihHN6L/pNU1ZQikrAb7CnyMBvisKG3SUAab0F3kVU=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+{% endblock js%}
+{% endblock content%}

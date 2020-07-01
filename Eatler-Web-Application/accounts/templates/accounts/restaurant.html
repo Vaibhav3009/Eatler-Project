@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Eatler</title>
+  <link href="{% static 'extra/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/restaurant.css' %}" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script src="{% static 'extra/jquery/jquery.cookie.js' %}"></script>
+   <script src="{% static 'extra/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+
+   <style type="text/css">
+     .card{
+            margin: 10px auto;
+            float: none;
+            margin-bottom: 10px;
+        }
+   </style>
+  
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'main:homepage'%}">Eatler</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href='{% url "main:homepage"%}'>Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href='{% url "main:list_restaurant" %}'>Restaurant</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Delivery Agents</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href='{% url "accounts:logout" %}'>Logout</a>
+        </li>
+
+      </ul>
+
+    </div>
+  </nav>
+
+
+  <div class="card-group container">
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <!-- <div class="card-header">Header</div> -->
+      <div class="card-body">
+        <h5 class="card-title">Total Earning</h5>
+        <p class="card-text">&#x20B9; 85400</p>
+      </div>
+    </div>
+
+    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+      <!-- <div class="card-header">Header</div> -->
+      <div class="card-body">
+        <h5 class="card-title">Rating</h5>
+        <p class="card-text">4/5</p>
+      </div>
+    </div>
+    <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+      <!-- <div class="card-header">Header</div> -->
+      <div class="card-body">
+        <h5 class="card-title">Total Orders</h5>
+        <p class="card-text">{{counter.all_orders}}</p>
+      </div>
+    </div>
+
+
+    
+
+
+
+
+  </div>
+<br><br><br>
+<div class="buttons" style="text-align: center">
+  <button type="button" id="pending-btn"class="btn btn-warning btn-lg mx-2 my-2">Pending Orders({{counter.pending}})</button>
+  <button type="button" id="confirm-btn" class="btn btn-success btn-lg mx-2 my-2">Confirmed Orders({{counter.confirm}})</button>
+  <button type="button" id="cancelled-btn" class="btn btn-danger btn-lg mx-2 my-2">Cancelled Orders({{counter.cancel}})</button>
+  <button type="button" id="out-for-delivery-btn" class="btn btn-primary btn-lg mx-2 my-2">Out for Delivery Orders({{counter.out_for_delivery}})</button>
+  <button type="button" id="delivered-btn" class="btn btn-secondary btn-lg mx-2 my-2">Delivered Order({{counter.delivered}})</button>
+  <button type="button" id="all-ordered-btn" class="btn btn-info btn-lg mx-2 my-2">All Orders({{counter.all_orders}})</button>
+</div>
+
+
+
+<div class="container align-items-center my-4" id="all-orders-list"  >
+  {% for key,item in order.items %}
+  <h3>{{key}} Restaurant</h3>
+  <hr>
+  
+  {% if not item.items %}
+  
+  <p class="my-4"> No Order from the Restaurant</p>
+  {% else %}
+  <div class="container">
+  {% for innerkey,inneritem in item.items %}
+  <div id="allorder{{inneritem.order_id}}" class="orders">
+  <div class="card">
+     
+    <h5 class="card-header bg-dark text-white">Order ID : {{inneritem.order_id}} <span style="float:right;margin:10px">Status : {{inneritem.order_status}}</span></h5>
+    <div class="card-body">
+      <h5 class="card-title">Amount : &#x20B9;{{inneritem.amount}}</h5>
+      <p class="card-text">Order Date and time : {{inneritem.order_date}} {{inneritem.order_time}}</p>
+      <button type="button" id="allorder{{inneritem.order_id}}" class="btn btn-warning all_view_order" data-toggle="modal" data-target="#exampleModalCenter">View Order</button>
+
+    </div>
+    </div>
+  </div>  
+  {% endfor %}
+  </div>
+  {% endif %}
+  {% endfor %}
+</div>
+
+
+
+<div class="container align-items-center my-4" id="all-pending-orders-list" >
+  {% for key,item in order.items %}
+  <h3>{{key}} Restaurant</h3>
+  <hr>
+  {% if not item.items %}
+  <p class="my-4"> No Order from the Restaurant</p>
+  {% else %}
+  
+
+  {% for innerkey,inneritem in item.items %}
+    {% if inneritem.order_status == "pending" %}
+    <div id="order{{inneritem.order_id}}" class="orders">
+    <div class="card">
+       
+      <h5 class="card-header bg-dark text-white">Order ID : {{inneritem.order_id}} <span style="float:right;margin:10px">Status : {{inneritem.order_status}}</span></h5>
+      <div class="card-body">
+        <h5 class="card-title">Amount : &#x20B9;{{inneritem.amount}}</h5>
+        <p class="card-text">Order Date and time : {{inneritem.order_date}} {{inneritem.order_time}}</p>
+        <div class="decider">
+            <button type="button" id="cancel{{inneritem.order_id}}" class="btn btn-danger cancel_order" style="float:right;margin:10px" >Cancel Order</button>
+
+            <button type="button" id="confirm{{inneritem.order_id}}" class="btn btn-success confirm_order" style="float:right;margin:10px" >Confirm Order</button>
+        </div>
+
+        <button type="button" id="order{{inneritem.order_id}}" class="btn btn-warning view_order" data-toggle="modal" data-target="#exampleModalCenter">View Order</button>
+      </div>
+      </div>
+    </div>  
+    {% endif %}
+  {% endfor %}
+  
+  {% endif %}
+  {% endfor %}
+</div>
+
+
+
+
+
+
+<div class="container align-items-center my-4" id="all-confirm-orders-list" >
+  {% for key,item in order.items %}
+  <h3>{{key}} Restaurant</h3>
+  <hr>
+  {% if not item.items %}
+  <p class="my-4"> No Order from the Restaurant</p>
+  {% else %}
+      
+  {% for innerkey,inneritem in item.items %}
+  {% if inneritem.order_status == "confirm" %}
+  <div id="order{{inneritem.order_id}}" class="orders">
+  <div class="card">
+     
+    <h5 class="card-header bg-dark text-white">Order ID : {{inneritem.order_id}} <span style="float:right;margin:10px">Status : {{inneritem.order_status}}</span></h5>
+    <div class="card-body">
+      <h5 class="card-title">Amount : &#x20B9;{{inneritem.amount}}</h5>
+      <p class="card-text">Order Date and time : {{inneritem.order_date}} {{inneritem.order_time}}</p>
+      <div class="decider">
+          <button type="button" id="out-for-delivery{{inneritem.order_id}}" class="btn btn-danger out-for-delivery" style="float:right;margin:10px" >Out For Delivery</button>
+
+          
+      </div>
+
+      <button type="button" id="order{{inneritem.order_id}}" class="btn btn-warning view_order" data-toggle="modal" data-target="#exampleModalCenter">View Order</button>
+    </div>
+    </div>
+  </div>  
+  {% endif%}
+  {% endfor %}
+  
+  {% endif %}
+  {% endfor %}
+</div>
+
+
+
+
+
+<div class="container align-items-center my-4" id="all-cancelled-orders-list" >
+  {% for key,item in order.items %}
+  <h3>{{key}} Restaurant</h3>
+  <hr>
+  {% if not item.items %}
+  <p class="my-4"> No Order from the Restaurant</p>
+  {% else %}
+      
+  {% for innerkey,inneritem in item.items %}
+  {% if inneritem.order_status == "cancel" %}
+  <div id="order{{inneritem.order_id}}" class="orders">
+  <div class="card">
+     
+    <h5 class="card-header bg-dark text-white">Order ID : {{inneritem.order_id}} <span style="float:right;margin:10px">Status : {{inneritem.order_status}}</span></h5>
+    <div class="card-body">
+      <h5 class="card-title">Amount : &#x20B9;{{inneritem.amount}}</h5>
+      <p class="card-text">Order Date and time : {{inneritem.order_date}} {{inneritem.order_time}}</p>
+      
+      <button type="button" id="order{{inneritem.order_id}}" class="btn btn-warning view_order" data-toggle="modal" data-target="#exampleModalCenter">View Order</button>
+    </div>
+    </div>
+  </div> 
+  {% endif %} 
+  {% endfor %}
+  
+  {% endif %}
+  {% endfor %}
+</div>
+
+
+
+
+
+
+
+<div class="container align-items-center my-4" id="all-out-for-delivery-order-list" >
+  {% for key,item in order.items %}
+  <h3>{{key}} Restaurant</h3>
+  <hr>
+  {% if not item.items %}
+  <p class="my-4"> No Order from the Restaurant</p>
+  {% else %}
+      
+  {% for innerkey,inneritem in item.items %}
+  {% if inneritem.order_status == "out_for_delivery" %}
+  <div id="order{{inneritem.order_id}}" class="orders">
+  <div class="card">
+     
+    <h5 class="card-header bg-dark text-white">Order ID : {{inneritem.order_id}} <span style="float:right;margin:10px">Status : {{inneritem.order_status}}</span></h5>
+    <div class="card-body">
+      <h5 class="card-title">Amount : &#x20B9;{{inneritem.amount}}</h5>
+      <p class="card-text">Order Date and time : {{inneritem.order_date}} {{inneritem.order_time}}</p>
+     
+      <button type="button" id="order{{inneritem.order_id}}" class="btn btn-warning view_order" data-toggle="modal" data-target="#exampleModalCenter">View Order</button>
+    </div>
+    </div>
+  </div>  
+  {% endif %}
+  {% endfor %}
+  
+  {% endif %}
+  {% endfor %}
+</div>
+
+
+
+
+
+<div class="container align-items-center my-4" id="all-delivered-orders-list" >
+  {% for key,item in order.items %}
+  <h3>{{key}} Restaurant</h3>
+  <hr>
+  {% if not item.items  %}
+  <h4 class="my-4"> No Order from the Restaurant</h4>
+  {% else %}
+    {% for innerkey,inneritem in item.items %}
+    {% if inneritem.order_status == "delivered" %}
+    <div id="order{{inneritem.order_id}}" class="orders">
+    <div class="card">
+       
+      <h5 class="card-header bg-dark text-white">Order ID : {{inneritem.order_id}} <span style="float:right;margin:10px">Status : {{inneritem.order_status}}</span></h5>
+      <div class="card-body">
+        <h5 class="card-title">Amount : &#x20B9;{{inneritem.amount}}</h5>
+        <p class="card-text">Order Date and time : {{inneritem.order_date}} {{inneritem.order_time}}</p>
+       
+        <button type="button" id="order{{inneritem.order_id}}" class="btn btn-warning view_order" data-toggle="modal" data-target="#exampleModalCenter">View Order</button>
+      </div>
+      </div>
+  </div>  
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  <br><hr>
+  {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Item Name</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Add On</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody id="insert-here">
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  
+
+<script type="text/javascript">
+
+
+
+
+  $(document).ready(function() {
+
+    $("#all-orders-list").hide();
+    $("#all-pending-orders-list").hide();
+    $("#all-confirm-orders-list").hide();
+    $("#all-cancelled-orders-list").hide();
+    $("#all-out-for-delivery-order-list").hide();
+    $("#all-delivered-orders-list").hide();
+
+
+    if($.cookie("current")==undefined)
+    {
+      $.cookie("current",'all-pending-orders-list');
+    }
+  
+    $("#"+$.cookie('current')).show();
+    
+  });
+
+
+
+  
+$(document).on('click','button.view_order',function(){
+
+    order_id=this.id.slice(5,)
+    console.log(order_id)     
+    product_list="{{ product_dict | escapejs}}"
+    product_list=JSON.parse(product_list)
+    product_object=product_list[order_id]
+    document.getElementById("exampleModalLongTitle").innerHTML=`Order ID - ${order_id}`
+    document.getElementById("insert-here").innerHTML=""
+    for(var item in product_object)
+    {
+      name=product_object[item]["product_name"]
+      price=parseInt(product_object[item]['price'].slice(1,))
+      quantity=parseInt(product_object[item]["quantity"])
+      amount=price*quantity
+      add_on=""
+      if(product_object[item]['add_on1']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on1']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on2']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on2']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on3']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on3']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on4']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on4']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on5']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on5']+"</small> "
+
+      }
+            document.getElementById("insert-here").innerHTML+=` <tr>
+                                                            <td>${name}</td>
+                                                            <td>${quantity}</td>
+                                                            <td>${add_on}</td>
+                                                            <td>&#x20B9;${amount}</td>
+                                                          </tr>`
+    }
+
+});
+
+
+
+$(document).on('click','button.all_view_order',function(){
+    order_id=this.id.slice(8,)
+    console.log(order_id)     
+    product_list="{{ product_dict | escapejs}}"
+    product_list=JSON.parse(product_list)
+    product_object=product_list[order_id]
+    document.getElementById("exampleModalLongTitle").innerHTML=`Order ID - ${order_id}`
+    document.getElementById("insert-here").innerHTML=""
+    for(var item in product_object)
+    {
+      name=product_object[item]["product_name"]
+      price=parseInt(product_object[item]['price'].slice(1,))
+      quantity=parseInt(product_object[item]["quantity"])
+      amount=price*quantity
+      add_on=""
+      if(product_object[item]['add_on1']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on1']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on2']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on2']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on3']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on3']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on4']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on4']+"</small><br> "
+
+      }
+      if(product_object[item]['add_on5']!="")
+      {
+        add_on+="<small>"+product_object[item]['add_on5']+"</small> "
+
+      }
+            document.getElementById("insert-here").innerHTML+=` <tr>
+                                                            <td>${name}</td>
+                                                            <td>${quantity}</td>
+                                                            <td>${add_on}</td>
+                                                            <td>&#x20B9;${amount}</td>
+                                                          </tr>`
+    }
+
+});
+
+
+
+
+
+$(document).on("click","button.cancel_order",function(){
+
+  id=this.id.slice(6,)
+  status="cancel"
+
+  $.ajax({
+      type:'POST',
+      url:'{% url "main:updateStatus"%}',
+      data:{"status":status,"id":id},
+      dataType:'json',
+      success:function(response){
+        console.log(response)
+        var order_id=`order${id}`
+        document.getElementById(order_id).innerHTML="";
+        window.location.reload()
+        }
+  });
+
+
+});
+
+
+         
+   
+$(document).on("click","button.confirm_order",function(event){
+
+id=this.id.slice(7,)
+  status="confirm"
+  $.ajax({
+      type:'POST',
+      url:'{% url "main:updateStatus"%}',
+      data:{"status":status,"id":id},
+      dataType:'json',
+      success:function(response){
+        console.log(response)
+        var order_id=`order${id}`
+        document.getElementById(order_id).innerHTML="";
+        window.location.reload()
+      }
+  });
+});   
+   
+$(document).on("click","button.out-for-delivery",function(event){
+
+id=this.id.slice(16,)
+  status="out_for_delivery"
+  $.ajax({
+      type:'POST',
+      url:'{% url "main:updateStatus"%}',
+      data:{"status":status,"id":id},
+      dataType:'json',
+      success:function(response){
+        console.log(response)
+        var order_id=`order${id}`
+        document.getElementById(order_id).innerHTML="";
+        window.location.reload()
+      }
+  });
+
+}); 
+
+
+
+$(document).on("click","#pending-btn",function(){
+
+  $.cookie("current",'all-pending-orders-list')
+  window.location.reload()
+});
+
+
+$(document).on("click","#confirm-btn",function(){
+  $.cookie("current",'all-confirm-orders-list')
+  window.location.reload()
+ 
+});
+
+
+$(document).on("click","#cancelled-btn",function(){
+  $.cookie("current",'all-cancelled-orders-list')
+  window.location.reload()  
+});
+
+
+$(document).on("click","#out-for-delivery-btn",function(){
+
+  $.cookie("current",'all-out-for-delivery-order-list')
+  window.location.reload()  
+});
+
+
+$(document).on("click","#delivered-btn",function(){
+
+  $.cookie("current",'all-delivered-orders-list')
+  window.location.reload()
+  
+});
+
+$(document).on("click","#all-ordered-btn",function(){
+  $.cookie("current",'all-orders-list')
+  window.location.reload()
+
+});
+
+
+
+
+</script>
+
+
+</body>
+</html>

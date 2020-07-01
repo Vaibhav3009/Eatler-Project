@@ -1,0 +1,311 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+
+
+
+{% block body %}
+
+
+
+
+
+
+  
+<div class="container">
+ 
+    {%if not form.instance.pk%}
+     <h2 class="my-4">Add Restaurant</h2>
+    
+    <form  method="post" enctype="multipart/form-data">
+    
+    {%csrf_token%}
+    {{form.errors}}
+
+
+    <div class="form-group row">
+        <label for="id_name" class="col-sm-2 col-form-label">Name </label>
+        <div class="col-sm-10">
+        {{form.name}}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="id_contact_number" class="col-sm-2 col-form-label">Contact Number </label>
+        <div class="col-sm-10">
+        {{form.contact_number}}
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label for="id_email" class="col-sm-2 col-form-label">Email </label>
+        <div class="col-sm-10">
+        {{form.email}}
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label for="id_short_description" class="col-sm-2 col-form-label">Short Description </label>
+        <div class="col-sm-10">
+        {{form.short_description}}
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label for="id_long_description" class="col-sm-2 col-form-label">Long Description </label>
+        <div class="col-sm-10">
+        {{form.long_description}}
+        </div>
+    </div>
+
+ <div class="form-group row">
+        <label for="id_photo" class="col-sm-2 col-form-label">Photo </label>
+        <div class="col-sm-10">
+        {{form.photo}}
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group row">
+        <label for="id_address" class="col-sm-2 col-form-label">Address </label>
+        <div class="col-sm-10">
+        {{form.address}}
+        </div>
+    </div>
+
+
+
+   
+
+    <div class="form-group row">
+        <label for="id_locality" class="col-sm-2 col-form-label">Locality </label>
+        <div class="col-sm-10">
+        {{form.locality}}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="id_city" class="col-sm-2 col-form-label">City </label>
+        <div class="col-sm-10">
+        {{form.city}}
+        </div>
+    </div>
+
+
+
+    <div class="form-group row">
+        <label for="id_live_video" class="col-sm-2 col-form-label">Live Video URL </label>
+        <div class="col-sm-10">
+        {{form.live_video}}
+        </div>
+    </div>
+
+  <div class="form-group row">
+        <label for="id_open_time" class="col-sm-2 col-form-label">Open Time </label>
+        <div class="col-sm-10">
+        {{form.open_time}}
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label for="id_close_time" class="col-sm-2 col-form-label">Close Time </label>
+        <div class="col-sm-10">
+        {{form.close_time}}
+        </div>
+    </div>
+
+
+    
+
+    <div class="form-group row">
+      <label for="belowdiv" class="col-sm-2 col-form-label">Select Cuisines</label>
+      <div id="belowdiv"class="row col-sm-10 my-2">
+            <div class="form-group form-check mx-2">
+                {{form.northindian}}
+                <label for="id_northindian" class="form-check-label">NorthIndian</label>
+            </div>
+
+              <div class="form-group form-check mx-2">
+                {{form.southindian}}
+                <label for="id_southindian" class="form-check-label">SouthIndian</label>
+              </div>
+            <div class="form-group form-check mx-2">
+                {{form.chinese}}
+                <label for="id_southindian" class="form-check-label">Chinese</label>
+            </div>
+            <div class="form-group form-check mx-2">
+                {{form.continental}}
+                <label for="id_southindian" class="form-check-label">Continental</label>
+            </div>
+            <div class="form-group form-check mx-2">
+                {{form.oriental}}
+                <label for="id_southindian" class="form-check-label">Oriental</label>
+            </div>
+      </div>
+  </div>
+
+
+    <div class="form-group row">
+            <label for="belowdiv2" class="col-sm-2 col-form-label">Select Type</label>
+            <div id="belowdiv"class="row col-sm-10 my-2">
+                  <div class="form-group form-check mx-2">
+                      {{form.veg}}
+                      <label for="id_veg" class="form-check-label">VEG</label>
+                  </div>
+
+                    <div class="form-group form-check mx-2">
+                      {{form.non_veg}}
+                      <label for="id_non_veg" class="form-check-label">NON-VEG</label>
+                  </div>
+               
+            </div>
+      </div>
+
+
+
+
+
+
+     
+    <input type="submit" class="btn btn-primary"  value="submit">
+  </form>
+
+</div>
+    
+    {%else%}
+    <div class="container">
+            <h2 class="my-4">Update Restaurant</h2>
+            <form  method="post" enctype="multipart/form-data">
+            
+            {%csrf_token%}
+            {{form.errors}}
+
+
+            <div class="form-group row">
+                <label for="id_name" class="col-sm-2 col-form-label">Name </label>
+                <div class="col-sm-10">
+                {{form.name}}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="id_contact_number" class="col-sm-2 col-form-label">Contact Number </label>
+                <div class="col-sm-10">
+                {{form.contact_number}}
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label for="id_email" class="col-sm-2 col-form-label">Email </label>
+                <div class="col-sm-10">
+                {{form.email}}
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label for="id_short_description" class="col-sm-2 col-form-label">Short Description </label>
+                <div class="col-sm-10">
+                {{form.short_description}}
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label for="id_long_description" class="col-sm-2 col-form-label">Long Description </label>
+                <div class="col-sm-10">
+                {{form.long_description}}
+                </div>
+            </div>
+
+         <div class="form-group row">
+                <label for="id_photo" class="col-sm-2 col-form-label">Photo </label>
+                <div class="col-sm-10">
+                {{form.photo}}
+                </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="id_live_video" class="col-sm-2 col-form-label">Live Video URL </label>
+              <div class="col-sm-10">
+              {{form.live_video}}
+              </div>
+           </div>
+
+          <div class="form-group row">
+                <label for="id_open_time" class="col-sm-2 col-form-label">Open Time </label>
+                <div class="col-sm-10">
+                {{form.open_time}}
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label for="id_close_time" class="col-sm-2 col-form-label">Close Time </label>
+                <div class="col-sm-10">
+                {{form.close_time}}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="belowdiv" class="col-sm-2 col-form-label">Select Cuisines</label>
+                <div id="belowdiv"class="row col-sm-10 my-2">
+                      <div class="form-group form-check mx-2">
+                          {{form.northindian}}
+                          <label for="id_northindian" class="form-check-label">NorthIndian</label>
+                      </div>
+
+                        <div class="form-group form-check mx-2">
+                          {{form.southindian}}
+                          <label for="id_southindian" class="form-check-label">SouthIndian</label>
+                      </div>
+                      <div class="form-group form-check mx-2">
+                          {{form.chinese}}
+                          <label for="id_southindian" class="form-check-label">Chinese</label>
+                      </div>
+                      <div class="form-group form-check mx-2">
+                          {{form.continental}}
+                          <label for="id_southindian" class="form-check-label">Continental</label>
+                      </div>
+                      <div class="form-group form-check mx-2">
+                          {{form.oriental}}
+                          <label for="id_southindian" class="form-check-label">Oriental</label>
+                      </div>
+                </div>
+          </div>
+
+
+          <div class="form-group row">
+                <label for="belowdiv2" class="col-sm-2 col-form-label">Select Type</label>
+                <div id="belowdiv"class="row col-sm-10 my-2">
+                      <div class="form-group form-check mx-2">
+                          {{form.veg}}
+                          <label for="id_veg" class="form-check-label">VEG</label>
+                      </div>
+
+                        <div class="form-group form-check mx-2">
+                          {{form.non_veg}}
+                          <label for="id_non_veg" class="form-check-label">NON-VEG</label>
+                      </div>
+                   
+                </div>
+          </div>
+             
+            <input type="submit" class="btn btn-primary"  value="submit">
+          </form>
+
+        </div>
+
+    {%endif%}
+  
+  
+
+{% endblock %}

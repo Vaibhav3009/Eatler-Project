@@ -1,0 +1,92 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block body %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<style>
+    .container{
+    margin-top:8%;
+    margin-left:8%;
+    }
+    .lob:hover{
+    -webkit-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+    -box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75)
+}
+</style>
+<script>
+    $(document).ready(function(){
+        $('.col-4-lg'):hover{
+        function(){
+        $(this).animate({
+        marginTop:"-=1%",
+        },200);
+        },
+        function(){
+        $(this).animate({
+        marginTop:"0%"
+        },200);
+        }
+    );
+    });
+</script>
+<link href="{% static 'extra/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<div class="jumbotron" style="text-align:center;">
+    <h4 style="font-size: 2.5rem;" class="white">Welcome to {{restaurant_details.name}} Restaurant</h4>
+
+  <div class="row" style="text-align:center; align-items:center; justify-content:center; ">
+
+
+    <div class="card mb-3 col-md-6 mx-3" style="max-width: 540px;text-align:center;">
+      <div class="row no-gutters" style="text-align:center; align-items:center; justify-content:center;">
+        <div class="col-4-lg">
+          <div class="card-body">
+              <p><b>Name : {{restaurant_details.name}}</b></p>
+              <p><b>Address :{{restaurant_details.address}}</b></p>
+              <p><b>City : {{restaurant_details.city}}</b></p>
+
+            <p> <a class="btn btn-warning" href="{%url 'main:update_restaurant' pk=restaurant_details.pk%}">Update Restaurant Details</a> </p>
+
+
+    <p> <a class="btn btn-danger" href="{%url 'main:delete_restaurant' pk=restaurant_details.pk%}">Delete Restaurant</a> </p>
+
+    <p> <a class="btn btn-info" href="{%url 'main:create_product' pk=restaurant_details.pk %}">Add Product</a> </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h4 style="font-size: 2.5rem;" class="white">List of products in the restaurant :</h4>
+    <div class="card-group" style="text-align:center; align-items:center; justify-content:center;">
+  {%for product in restaurant_details.products.all%}
+   <div class="row menu-container">
+    <div class="product-top" >
+      <div class="col-4-lg ml-3">
+
+        <div class="card lob" style="text-align:center; justify-content:center; align-items:center;">
+        <div class="card-body" >
+          <h5 class="card-title">{{product.name}}</h5>
+          <p class="card-text">Its price is &#x20B9;{{product.price}}</p>
+       </div>
+
+        <div class="image" style=" width:200px; height:150px;">
+          <img src="/media/{{ product.photo}}" class="card-img" alt="Responsive image">
+        </div>
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">{{ product.short_description }}</li>
+        </ul>
+        <div class="card-body" style="display:inline">
+          <a class="btn btn-warning" href="{%url  'main:update_product' pk=product.pk   %}" >Update Product</a>
+          <a class="btn btn-danger" href="{%url  'main:delete_product' pk=product.pk   %}" >Delete Product</a>
+        </div>
+      </div>
+
+      </div>
+    </div>
+   </div>
+              {%endfor%}
+    </div>
+</div>
+  {% endblock%}

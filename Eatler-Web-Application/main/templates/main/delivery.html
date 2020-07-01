@@ -1,0 +1,594 @@
+{% extends "main/mainbase.html"%}
+{% load static %}
+
+{% block css %}
+<style type="text/css">
+
+  .cart-item-name{
+    width: 80%;
+    text-align:left;
+  }
+  .cart-item-qty{
+    width: 20%;
+    text-align:center;
+  }
+
+</style>
+
+{% endblock%}
+
+
+
+
+
+
+{% block content %}
+  <style>
+  .card-img {
+  width: 80%;
+  height: 40vh;
+  object-fit: cover;
+  }
+  .restaurant-details{
+  margin-top:70px;
+  background-color:#f78e05;
+  padding:10px;
+  }
+  .card{
+  background-color:#f78e05;
+  color:white;
+  font-weight: bolder;
+  margin: 0 auto;
+  float: none;
+  outline: none;
+  border: none;
+  }
+  </style>
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!--Restaurant Details Card  -->
+  <div class="restaurant-details">
+    <div class="card mb-3" style="max-width: 80%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          {% if restaurant1.photo_url%}
+            <img src="{{restaurant1.photo_url}}" class="card-img" alt="...">
+          {% else %}
+            <img src="/media/{{restaurant1.photo}}" class="card-img" alt="...">
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{restaurant1.name}}</h5>
+            <p class="card-text">{{restaurant1.short_description}}</p>
+            <p class="card-text">Address : {{restaurant1.address}} {{restaurant1.locality}}</p>
+            <p class="card-text">Opening Time :{{restaurant1.open_time}}</p>
+            <p class="card-text">Closing Time : {{restaurant1.close_time}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Restaurant Dropdown option -->
+  <div class="myform text-center">
+    <form class="form-inline" id="restaurant-select-form" action="{% url 'main:delivery_menu'%}" method="post">
+      {% csrf_token %}
+      <div class="row " style="width: 100% ;margin:auto">
+        <div style="width: 100% ;margin:auto">
+          <select class="custom-select" id="select_restaurant" style="width:40%" onclick()="chooseRestaurant()"name="restaurant" required >
+            <option selected disabled>Choose Restaurant</option>
+            {% for key,item in restaurants.items %}
+              {%if item.name != restaurant1.name%}
+              <option value="{{item.name}}">{{item.name}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      
+       <span class="input-group-btn">
+          <input type="submit" class="btn btn-primary" id="alertcart"  value="GO">
+      </span>
+      </div>
+    </div>
+   
+  </form>
+</div>
+<!-- ======= Menu Section ======= -->
+<section id="menu" class="menu">
+  <div class="container">
+    <div class="section-title">
+      <h2>Check Our tasty <span>Menu</span></h2>
+    </div>
+    <div class="row menu-container">
+      {% for key,item in products.items%}
+        <div class="col-lg-6 menu-item filter-starters">
+          <div class="menu-content">
+            <a href="#close" class='forum-title' name="abc" id="name{{key}}" onclick="getProduct('{{key}}')" >{{item.name}}</a><span id="price{{key}}">&#x20B9;{{item.price}}</span>
+          </div>
+          <div class="menu-ingredients">
+            {{item.short_description}}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- End Menu Section -->
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+Launch demo modal
+</button> -->
+<!-- Modal for clear cart -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Items Already in Cart</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Your cart contains items from other restaurant. Would you like to reset your cart for adding items from this restaurant?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="clearCartProceed">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal for the product-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Product name</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="product-image" style="text-align:center;">
+        </div>
+        <hr>
+        <div id="long-description">
+        </div>
+        <hr>
+        <div id="price">
+        </div>
+        <hr>
+        <form class=""  method="post">
+          {% csrf_token %}
+          <div id="add-ons" class="custom-control custom-checkbox" >
+          </div>
+          <!-- <a href='#'>
+            <button class='btn btn-success' id='checkout'>Checkout</button>
+          </a>
+          <button class='btn btn-warning' onclick='clearCart()' id='clearcart'>Clear Cart</button> -->
+        </div>
+        <div class="modal-footer" id="add">
+          <span id="xyz" class="divpr">
+            <!-- <input type="button" id="abc"  class="btn btn-primary cart" value="Add to Cart"> -->
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% block js%}
+<script type="text/javascript">
+
+function getProduct(key)
+{
+    var list="{{dump_products | escapejs}}"
+    var product_list=JSON.parse(list)
+
+    document.getElementById('exampleModalLongTitle').innerHTML=product_list[key]['name']
+    document.getElementById('product-image').innerHTML='<img style="max-width:100%; height:250px;object-fit:cover"  src="'+product_list[key]['photo_url']+'"/>';
+    document.getElementById('long-description').innerHTML='<p>Description :</p><p>'+product_list[key]['long_description']+'</p>'
+    document.getElementById('price').innerHTML='<p>Price : '+product_list[key]['price']+'</p>'
+    document.getElementById('add-ons').innerHTML=""
+
+
+    document.getElementById('add-ons').innerHTML+='<input type="checkbox" id="add_on1'+key+'" class="form-check-input add_on1"  name="" value="'+product_list[key]['add_on1']+'"/><label class="form-check-label" for="defaultCheck1" >'+product_list[key]['add_on1']+'</label><br>';
+    document.getElementById('add-ons').innerHTML+='<input type="checkbox" id="add_on2'+key+'" class="form-check-input add_on2"  name="" value="'+product_list[key]['add_on2']+'"/><label class="form-check-label" for="defaultCheck2" >'+product_list[key]['add_on2']+'</label><br>';
+    document.getElementById('add-ons').innerHTML+='<input type="checkbox" id="add_on3'+key+'" class="form-check-input add_on3"  name="" value="'+product_list[key]['add_on3']+'"/><label class="form-check-label" for="defaultCheck3" >'+product_list[key]['add_on3']+'</label><br>';
+    document.getElementById('add-ons').innerHTML+='<input type="checkbox" id="add_on4'+key+'" class="form-check-input add_on4"  name="" value="'+product_list[key]['add_on4']+'"/><label class="form-check-label" for="defaultCheck4" >'+product_list[key]['add_on4']+'</label><br>';
+    document.getElementById('add-ons').innerHTML+='<input type="checkbox" id="add_on5'+key+'" class="form-check-input add_on5"  name="" value="'+product_list[key]['add_on5']+'"/><label class="form-check-label" for="defaultCheck5" >'+product_list[key]['add_on5']+'</label><br>';
+    if(product_list[key]['add_on1']=="")
+    {
+      document.getElementById("add_on1"+key).style.display="none";
+    }
+    if(product_list[key]['add_on2']=="")
+    {
+      document.getElementById("add_on2"+key).style.display="none";
+
+    }
+    if(product_list[key]['add_on3']=="")
+    {
+      document.getElementById("add_on3"+key).style.display="none";
+
+    }
+    if(product_list[key]['add_on4']=="")
+    {
+      document.getElementById("add_on4"+key).style.display="none";
+    }
+    if(product_list[key]['add_on5']=="")
+    {
+      document.getElementById("add_on5"+key).style.display="none";
+    }
+
+
+
+    document.getElementById('add').getElementsByTagName('span')[0].setAttribute("id",'div'+key);
+    console.log(document.getElementById('add').getElementsByTagName('span')[0].id)
+
+    if(localStorage.getItem('cart')==null){
+      var cart={};
+    }
+    else {
+      cart=JSON.parse(localStorage.getItem('cart'));
+      document.getElementById('count').innerHTML = Object.keys(cart).length;
+    }
+
+    if(cart[key]==undefined)
+    {
+        document.getElementById('add').getElementsByTagName('span')[0].innerHTML='<input type="button" id="'+key+'"  class="btn btn-primary cart" value="Add to Cart">'
+
+    }
+    else {
+      updateCart(cart,key);
+    }
+
+
+
+
+}
+
+
+// added action when any product is clicked in the menu to show product modal
+$(".forum-title").click(function() {
+  $('#exampleModalCenter').modal('show');
+  return false;
+});
+
+// mentioned method of order
+
+
+$(document).ready(function(){
+      if(localStorage.getItem('method')==null){
+        var method = '{{ method}}'
+        localStorage.setItem('method',method);
+      }
+      
+
+});
+
+
+
+
+// show alert when restaurant changes
+$("#alertcart").click(function() {
+
+
+  if(localStorage.getItem('cart')==null){
+    var cart={};
+  }
+  else {
+    cart=JSON.parse(localStorage.getItem('cart'));
+  }
+  if( Object.keys(cart).length==0){
+    var x = document.getElementById('restaurant-select-form')
+    x.submit();
+
+
+  }
+  else {
+    $('#exampleModal').modal('show');
+    return false;
+  }
+
+});
+
+
+$("#clearCartProceed").click(function(){
+  clearCart()
+  var x = document.getElementById('restaurant-select-form')
+  x.submit();
+});
+
+
+// added action on the clearCart function
+$(document).on("click", "a.clearit" , function() {
+    clearCart();
+});
+
+
+// getting cart from localStorage
+if(localStorage.getItem('cart')==null){
+  var cart={};
+}
+else {
+  cart=JSON.parse(localStorage.getItem('cart'));
+  document.getElementById('count').innerHTML = Object.keys(cart).length;
+
+}
+
+$(document).on("click","a.checkout",function(e){
+
+  console.log("Clicked")
+  if(Object.keys(cart).length==0)
+  {
+    alert("YOUR CART IS EMPTY!!!");
+    e.preventDefault();
+  }
+
+
+});
+
+
+// when Add to cart in the product modal is clicked
+$(".divpr").unbind().delegate("input","click",function(){
+  var idstr=this.id.toString();
+  console.log(idstr)
+  if(cart[idstr]!=undefined)
+  {
+    qty=cart[idstr][0]+1;
+    name=cart[idstr][1];
+    price=cart[idstr][2];
+    add_on1=cart[idstr][3];
+    add_on2=cart[idstr][4];
+    add_on3=cart[idstr][5];
+    add_on4=cart[idstr][6];
+    add_on5=cart[idstr][7];
+    cart[idstr]=[qty,name,price,add_on1,add_on2,add_on3,add_on4,add_on5];
+  }
+  else {
+    qty=1;
+    name=document.getElementById('name'+idstr).innerHTML;
+    price=document.getElementById('price'+idstr).innerHTML;
+    if(document.getElementById('add_on1'+idstr).checked)
+    {
+      add_on1=document.getElementById('add_on1'+idstr).value;
+    }
+    else {
+      add_on1=""
+    }
+
+    if(document.getElementById('add_on2'+idstr).checked)
+    {
+      add_on2=document.getElementById('add_on2'+idstr).value;
+    }
+    else {
+      add_on2=""
+    }
+
+    if(document.getElementById('add_on3'+idstr).checked)
+    {
+      add_on3=document.getElementById('add_on3'+idstr).value;
+    }
+    else {
+      add_on3=""
+    }
+    if(document.getElementById('add_on4'+idstr).checked)
+    {
+      add_on4=document.getElementById('add_on4'+idstr).value;
+    }
+    else {
+      add_on4=""
+    }
+    if(document.getElementById('add_on5'+idstr).checked)
+    {
+      add_on5=document.getElementById('add_on5'+idstr).value;
+    }
+    else {
+      add_on5=""
+    }
+    cart[idstr]=[qty,name,price,add_on1,add_on2,add_on3,add_on4,add_on5];
+
+  }
+  updateCart(cart,idstr)
+});
+
+
+// to activate popover in the navbar
+$('#popcart').popover();
+
+// calling updateCart function
+updatePopcart(cart)
+
+
+// function to update the cart shown in navbar
+function updatePopcart(cart)
+{
+  var popstr="";
+  popstr=popstr+'<h5 class="text-center">My Cart<h5><hr> <div class="mx-2 my-2">';
+  var i=1;
+  for(var item in cart)
+  {
+    popstr=popstr+'<div class="row"><div class="cart-item-name px-2">';
+    popstr=popstr+ '<small>' +document.getElementById('name'+item).innerHTML +'</small></div><div class="cart-item-qty"><small>    Qty : '+cart[item][0]+'</small></div></div><hr>';
+    i=i+1;
+  }
+  popstr=popstr+"</div> <a href='{%url 'main:checkout_url'%}' class='btn btn-success checkout'>Check Out</a> <a href='#' class='btn btn-warning mx-4 clearit'>Clear Cart</a> ";
+  document.getElementById('popcart').setAttribute('data-content',popstr);
+  $('#popcart').popover('show');
+}
+
+
+
+
+
+
+
+// function to update the cart and changing Add to Cart to plus-minus button
+function updateCart(cart,item)
+{
+  document.getElementById('div'+item).innerHTML="<button id='minus" + item+"'class='btn btn-primary minus'>-</button> <span id='val" + item + "''>"+cart[item][0]+"</span> <button id='plus"+item+"' class='btn btn-primary plus'>+</button>";
+  localStorage.setItem('cart',JSON.stringify(cart));
+  document.getElementById('count').innerHTML = Object.keys(cart).length;
+  updatePopcart(cart)
+  console.log(cart)
+}
+
+//assigning id to the span
+function addKey(item)
+{
+  document.getElementById('add').getElementsByTagName('span')[0].setAttribute("id",'div'+item);
+}
+
+
+// function to clear the cart when clear cart is called
+function clearCart()
+{
+  cart=JSON.parse(localStorage.getItem('cart'));
+  for(var item in cart)
+  {
+    addKey(item)
+    document.getElementById('div'+item).innerHTML='<input type="button" id="'+item+'"  class="btn btn-primary cart" value="Add to Cart">'
+  }
+  localStorage.clear();
+  cart={};
+  localStorage.setItem('cart',JSON.stringify(cart));
+  document.getElementById('count').innerHTML = Object.keys(cart).length;
+  updatePopcart(cart)
+}
+
+
+// added action when minus button is clicked on the modal
+$('.divpr').on("click","button.minus",function()
+{
+  a=this.id.slice(5, );
+  console.log(a);
+  cart[a][0]=cart[a][0]-1;
+  if(cart[a][0]==0)
+  {
+    delete cart[a];
+    document.getElementById('add').getElementsByTagName('span')[0].innerHTML='<input type="button" id="'+a+'"  class="btn btn-primary cart" value="Add to Cart">'
+    localStorage.setItem('cart',JSON.stringify(cart));
+    document.getElementById('count').innerHTML = Object.keys(cart).length;
+    updatePopcart(cart)
+  }
+  else {
+          cart[a][0]=Math.max(0,cart[a][0]);
+          // cart=JSON.parse(localStorage.getItem('cart'));
+          document.getElementById('val'+a).innerHTML=cart[a][0];
+          if(document.getElementById('add_on1'+a).checked)
+          {
+            add_on1=document.getElementById('add_on1'+a).value;
+          }
+          else {
+            add_on1=""
+          }
+
+          if(document.getElementById('add_on2'+a).checked)
+          {
+            add_on2=document.getElementById('add_on2'+a).value;
+          }
+          else {
+            add_on2=""
+          }
+
+          if(document.getElementById('add_on3'+a).checked)
+          {
+            add_on3=document.getElementById('add_on3'+a).value;
+          }
+          else {
+            add_on3=""
+          }
+          if(document.getElementById('add_on4'+a).checked)
+          {
+            add_on4=document.getElementById('add_on4'+a).value;
+          }
+          else {
+            add_on4=""
+          }
+          if(document.getElementById('add_on5'+a).checked)
+          {
+            add_on5=document.getElementById('add_on5'+a).value;
+          }
+          else {
+            add_on5=""
+          }
+          qty=cart[a][0];
+          name=cart[a][1];
+          price=cart[a][2];
+          cart[a]=[qty,name,price,add_on1,add_on2,add_on3,add_on4,add_on5];
+          updateCart(cart,a)
+  }
+
+
+
+
+});
+
+
+// added action when plus button in clicked on the modal
+$('.divpr').on("click","button.plus",function()
+{
+      a=this.id.slice(4, );
+      console.log(a);
+      cart[a][0]=cart[a][0]+1;
+      document.getElementById('val'+a).innerHTML=cart[a][0];
+      if(document.getElementById('add_on1'+a).checked)
+      {
+        add_on1=document.getElementById('add_on1'+a).value;
+      }
+      else {
+        add_on1=""
+      }
+
+      if(document.getElementById('add_on2'+a).checked)
+      {
+        add_on2=document.getElementById('add_on2'+a).value;
+      }
+      else {
+        add_on2=""
+      }
+
+      if(document.getElementById('add_on3'+a).checked)
+      {
+        add_on3=document.getElementById('add_on3'+a).value;
+      }
+      else {
+        add_on3=""
+      }
+      if(document.getElementById('add_on4'+a).checked)
+      {
+        add_on4=document.getElementById('add_on4'+a).value;
+      }
+      else {
+        add_on4=""
+      }
+      if(document.getElementById('add_on5'+a).checked)
+      {
+        add_on5=document.getElementById('add_on5'+a).value;
+      }
+      else {
+        add_on5=""
+      }
+      qty=cart[a][0];
+      name=cart[a][1];
+      price=cart[a][2];
+      cart[a]=[qty,name,price,add_on1,add_on2,add_on3,add_on4,add_on5];
+      updateCart(cart,a)
+});
+
+
+
+</script>
+
+{% endblock js %}
+
+
+{% endblock content %}

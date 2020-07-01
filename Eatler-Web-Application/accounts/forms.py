@@ -1,0 +1,87 @@
+from django import forms
+from django.conf import settings
+from django.utils.translation import ugettext as _
+# from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import authenticate
+
+from .models import User
+
+
+class RegisterForm(forms.ModelForm):
+
+    # phone_number = forms.IntegerField(required=True)
+    # password1 = forms.CharField(widget=forms.PasswordInput())
+    # password2 = forms.CharField(widget=forms.PasswordInput())
+    # country_code = forms.IntegerField()
+
+    # MIN_LENGTH = 4
+
+    class Meta:
+        model = User
+        fields = ['country_code','phone_number',
+                  'full_name' ]  # 'username' 'password1', 'password2',
+
+    # def clean_username(self):
+    #     username = self.data.get('username')
+    #     return username
+
+    # def clean_password1(self):
+    #     password = self.data.get('password1')
+    #     validate_password(password)
+    #     if password != self.data.get('password2'):
+    #         raise forms.ValidationError(_("Passwords do not match"))
+    #     return password
+
+    def clean_phone_number(self):
+        phone_number = self.data.get('phone_number')
+        if User.objects.filter(phone_number=phone_number).exists():
+            raise forms.ValidationError(
+                _("Another user with this phone number already exists"))
+        return phone_number
+
+    def save(self, *args, **kwargs):
+        user = super(RegisterForm, self).save(*args, **kwargs)
+        # user.set_password(self.cleaned_data['password1'])
+        print('Saving user with country_code', user.country_code)
+        user.save()
+        return user
+
+
+class PhoneVerificationForm(forms.Form):
+    one_time_password = forms.IntegerField()
+
+    class Meta:
+        fields = ['one_time_password',]
+
+
+
+class LoginForm(forms.Form):
+    # username = forms.CharField()
+    # phone_number=forms.IntegerField(unique=True)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        fields =  ['phone_number']             #['username','password']
+
+    # def clean(self):
+    #     # username = self.cleaned_data.get('username')
+    #     phone_number=self.cleaned_data.get('phone_number')
+    #     # password = self.cleaned_data.get('password')
+    #     # user = authenticate(username=phone_number, password=password)
+    #
+    #     if not user:
+    #         raise forms.ValidationError("Sorry, that login was invalid. Please try again.")
+    #     return self.cleaned_data
+    #
+    # def login(self, request):
+    #     username = self.cleaned_data.get('username')
+    #     password = self.cleaned_data.get('password')
+    #     user = authenticate(username=username, password=password)
+    #     return user
+
+    def save(self, *args, **kwargs):
+        user = super(LoginForm, self).save(*args, **kwargs)
+        # user.set_password(self.cleaned_data['password1'])
+        print('Saving user with country_code', user.phone_number)
+        user.save()
+        return user

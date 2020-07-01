@@ -1,0 +1,42 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block body %}
+
+
+
+ 
+
+
+<div class="container">
+  <h2>
+    {%if not form.instance.pk%}
+    Add Product
+    {%else%}
+    Update Product
+    {%endif%}
+</h2>
+  <form  method="post" enctype="multipart/form-data">
+    
+    {%csrf_token%}
+    {{form.as_p}}
+ <input type="submit" class="btn btn-primary"  value="submit">
+  </form>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

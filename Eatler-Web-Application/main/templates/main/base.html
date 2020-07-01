@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Eatler</title> 
+
+
+  <link href="{% static 'extra/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/venobox/venobox.css' %}" rel="stylesheet">
+  <link href="{% static 'extra/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+  <link href="{% static 'css/restaurant.css' %}" rel="stylesheet">
+  <link href="{% static 'css/mainbase.css' %}" rel="stylesheet">
+  {% block base_css%}
+  {% endblock %}
+
+
+</head>
+
+<body class="main_base_div">
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'main:homepage'%}">Eatler</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main:homepage'%}">Home </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'main:list_restaurant' %}">Restaurant</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Delivery</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="{% url 'accounts:logout' %}" >Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+  {% block body %}
+  {% endblock %}
+
+<!-- ======= Footer ======= -->
+  <footer id="footer" style="background: #343a40 !important">
+    <div class="container">
+      <h3>Eatler</h3>
+      <div class="social-links">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; Copyright <strong><span>Eatler</span></strong>. All Rights Reserved
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+<script src="{% static 'extra/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>

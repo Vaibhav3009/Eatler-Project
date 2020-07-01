@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <title>Dashboard</title>
+</head>
+<body>
+  <div class="jumbotron">
+    <div class="container">
+      {% if messages %}
+      <div id="messages">
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-info"
+             role="alert">
+          <button type="button" class="close" data-dismiss="alert"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ message|escape }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    <h1>Yahoo logged in!</h1>
+    <br><br>
+    <div class="table-responsive">
+      <table class="table">
+        <tr>
+          <td>
+            Name : {{user.full_name}}
+            <br>
+            Phone : +{{user.country_code}} {{user.phone_number}}
+            <!-- <br>
+            Username : {{user.get_username}}
+            <br> -->
+          </td>
+          <td>
+          <!-- Account Verified: {{user.phone_number_verified}} -->
+          <br>
+          <!-- <form action="" method="post">
+            {% csrf_token %}
+            Two Factor Authentication:
+              {%if user.two_factor_auth %}
+              <button type="submit" class="btn btn-success" name="two_factor_auth">
+                ENABLED
+              {%else%}
+              <button type="submit" class="btn btn-danger" name="two_factor_auth">
+                DISABLED
+              {%endif%}
+            </button>
+            Click to toggle.
+          </form> -->
+
+        </tr>
+      </table>
+
+</div>
+    <a href="/logout"  class="btn btn-danger">Logout</a>
+  </div>
+  </div>
+  <script src="/static/js/jquery.min.js" charset="utf-8"></script>
+  <script src="/static/js/bootstrap.min.js" charset="utf-8"></script></body>
+</html>

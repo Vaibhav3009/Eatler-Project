@@ -1,0 +1,138 @@
+{% extends "main/mainbase.html"%}
+{% load static%}
+{% block css%}
+<link href="{% static 'css/orderstatus.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="maincontenty" >
+
+  <br>
+  <br>
+  <div class="container-fluid my-5 d-sm-flex justify-content-center">
+    {% if response.RESPCODE == '01' %}
+    
+    <div class="card px-2">
+        <div class="card-header bg-white">
+            <div class="row justify-content-between">
+                <div class="col">
+                    <p class="text-muted"> Order ID <span class="font-weight-bold text-dark">{{response.id}}</span></p>
+                    <p class="text-muted"> Placed On <span class="font-weight-bold text-dark">{{response.date}} at {{response.time}}</span> </p>
+
+                </div>
+                  <img class="align-self-center img-fluid" src="{% static 'img/logo.jpeg'%}" width="63" height="63">
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="media flex-column flex-sm-row">
+                <div class="media-body ">
+                    <h5 class="bold">Thank You, {{ response.name}} for choosing Eatler!</h5>
+                    <p class="text-muted"> Your Order total is: </p>
+                    <h4 class="mt-3 mb-4 bold"> <span class="mt-5">&#x20B9;</span> {{ response.total }} <span class="small text-muted"> via ({{ response.payment_mode }}) </span></h4>
+                    <p class="text-muted">You have ordered from: <span class="Today">{{ response.restaurant }}</span></p>
+                    <p class="text-muted">Your order includes:</p>
+
+                    {% for key,item in response.product_list.items %}
+
+                    <div class="list-group">
+                      {% for innerkey,inneritem in item.items %}
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ inneritem.product_name }}</h5>
+                        <small class="text-muted">Qty: {{inneritem.quantity}}</small>
+                      </div>
+                      <!-- <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> -->
+                      {% if inneritem.add_on1%}
+                      <small class="text-muted">{{inneritem.add_on1}}</small>
+                      {% endif %}
+
+                      {% if inneritem.add_on2%}
+                      <small class="text-muted">{{inneritem.add_on2}}</small>
+                      {% endif %}
+
+                      {% if inneritem.add_on4%}
+                      <small class="text-muted">{{inneritem.add_on3}}</small>
+                      {% endif %}
+
+                      {% if inneritem.add_on4%}
+                      <small class="text-muted">{{inneritem.add_on4}}</small>
+                      {% endif %}
+
+                      {% if inneritem.add_on5%}
+                      <small class="text-muted">{{inneritem.add_on5}}</small>
+                      {% endif %}
+
+                    </a>
+                    {% endfor %}
+                    </div>
+                  {% endfor %}
+
+                    <p class="text-muted">Your Order Status: <span class="Today">{{ response.order_status }}</span></p>
+                </div>
+            </div>
+
+        <div class="row px-3">
+            <div class="col">
+                <ul id="progressbar">
+                    <li class="step0 active " id="step1">CONFIRMED</li>
+                    <li class="step0 active text-center" id="step2">FOOD PREPARING</li>
+                    <li class="step0 text-muted text-right" id="step3">OUT FOR DELIVERY</li>
+                </ul>
+            </div>
+        </div>
+        <h5 class="bold">Here is the live view, straight from the kitchen: </h5>
+        </div>
+        <div class="card-footer bg-white px-sm-3 pt-sm-4 px-0">
+            <div class="row text-center ">
+                '<iframe width="560" height="315" src={{ response.link }} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+            </div>
+        </div>
+        <div style="text-align: center;font-weight: bolder;">
+          <a href="/">Contine Ordering</a>
+        </div>
+    </div>
+
+    
+    {% else %}
+    <div class="container">
+      <p>Payment Failed!!</p>
+      <br><br>
+      {% if response.how == 'delivery' or response.how == 'schedule-delivery' %}
+      <div >
+          <a style="font-weight: bolder;color: white !important;" href="{% url 'main:checkout_url'%}">Please Try Again</a>
+      </div>
+      {% else %}
+      <div >
+            <a style="font-weight: bolder;color: white !important;" href="{% url 'main:checkout_takeaway_url'%}">Please Try Again</a>
+      </div>
+
+    {% endif %}
+    </div>
+    {% endif %}
+    
+    
+
+</div>
+<br>
+<br>
+</div>
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+
+$(document).ready(function(){
+  if(localStorage.getItem('cart')==null){
+  var cart={};
+}
+else {
+
+  cart=JSON.parse(localStorage.getItem('cart'));
+  console.log('cart')
+  document.getElementById('count').innerHTML = Object.keys(cart).length;
+}
+
+})
+
+</script>
+{% endblock %}

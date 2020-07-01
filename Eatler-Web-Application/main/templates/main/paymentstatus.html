@@ -1,0 +1,164 @@
+{% extends "main/base.html"%}
+{% load static%}
+
+     {% block base_css%}
+  <link href="{% static 'css/paymentstatus.css' %}" rel="stylesheet">
+    {% endblock%}
+
+{% block body%}
+    <div class="paymentdiv">
+      {{response }}
+      {% if response.RESPCODE == '01' %}
+      Order placed successfully
+      {% else %}
+      <a href="{% url 'main:checkout_url'%}">Please Try Again</a>
+      {% endif %}
+      <a href="/">Contine Ordering</a>
+
+
+      <div class="container-fluid my-5 d-flex justify-content-center">
+        <div class="card card-1">
+            <div class="card-header bg-white">
+                <div class="media flex-sm-row flex-column-reverse justify-content-between ">
+                    <div class="col my-auto">
+                        <h4 class="mb-0">Thanks for your Order,<span class="change-color">{{response.customer_name}}</span> !</h4>
+                    </div>
+                    <div class="col-auto text-center my-auto pl-0 pt-sm-4"> 
+                        <p class="mb-4 pt-0 Glasses"><img width="115" height="100" src="{% static 'img/logo.jpeg'%}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mx-2">
+                <table class="table">
+                          <thead class="thead-dark">
+                            <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Quantity</th>
+                              <th scope="col">Add Ons</th>
+                              <th scope="col">Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for key,item in response.product_list.items%}
+                            <tr>
+                              <td>{{item.product_name}}</td>
+                              <td>{{item.quantity}}</td>
+                              <td>
+                              {% if item.add_on1%}
+                              <small>{{item.add_on1}}</small><br>
+                              {% endif %}
+
+                              {% if item.add_on2%}
+                              <small>{{item.add_on2}}</small><br>
+                              {% endif %}
+
+                              {% if item.add_on3%}
+                              <small>{{item.add_on3}}</small><br>
+                              {% endif %}
+
+                              {% if item.add_on4%}
+                              <small>{{item.add_on4}}</small><br>
+                              {% endif %}
+
+                              {% if item.add_on5%}
+                              <small>{{item.add_on5}}</small>
+                              {% endif %}
+                              </td>
+                              <td>{{item.price}}</td>
+                            </tr>
+                            {% endfor%}
+                          </tbody>
+                    </table>
+                </div>
+
+            <div class="card-body">
+
+                <hr>
+               
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="row justify-content-between">
+                            <div class="col-auto">
+                                <p class="mb-1 text-dark"><b>Order Details</b></p>
+                            </div>
+
+                            <div class="flex-sm-col text-right col">
+                                <p class="mb-1"><b>Total</b></p>
+                            </div>
+                            <div class="flex-sm-col col-auto">
+                                <p class="mb-1">&#8377;{{response.TXNAMOUNT}}</p>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col">
+                                <p class="mb-1"> <b>Discount</b></p>
+                            </div>
+                            <div class="flex-sm-col col-auto">
+                                <p class="mb-1">&#8377;150</p>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col">
+                                <p class="mb-1"><b>GST 18%</b></p>
+                            </div>
+                            <div class="flex-sm-col col-auto">
+                                <p class="mb-1">843</p>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col">
+                                <p class="mb-1"><b>Delivery Charges</b></p>
+                            </div>
+                            <div class="flex-sm-col col-auto">
+                                <p class="mb-1">Free</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row invoice ">
+                    <div class="col">
+                        <p class="mb-1"> Order Number : {{response.ORDERID}}</p>
+                        <p class="mb-1">Order Date : {{response.order_date}}</p>
+                        <p class="mb-1">Recepits Voucher:18KU-62IIK</p>
+                    </div>
+                </div>
+                
+                
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="card card-2">
+                            <div class="card-body">
+                               
+                                <!-- live view -->
+                               <a class="btn btn-warning" href="{% url 'main:orderStatus' order_id=response.ORDERID %}">Click Me! To track your order and see how your food is being prepared!!!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+           
+        </div>
+    </div>
+
+      
+
+
+      
+
+</div>
+
+
+{% endblock %}
+<script src="{% static 'extra/jquery/jquery.min.js' %}"></script>
+      <script src="{% static 'extra/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'extra/jquery.easing/jquery.easing.min.js' %}"></script>
+      <script src="{% static 'extra/jquery-sticky/jquery.sticky.js' %}"></script>
+      <script src="{% static 'extra/isotope-layout/isotope.pkgd.min.js' %}"></script>
+      <script src="{% static 'extra/venobox/venobox.min.js' %}"></script>
+      <script src="{% static 'extra/owl.carousel/owl.carousel.min.js' %}"></script>
