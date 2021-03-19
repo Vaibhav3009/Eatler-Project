@@ -9,7 +9,7 @@ Django==3.0.6
 django-google-maps==0.12.1
 django-jquery==3.1.0
 django-phonenumber-field==4.0.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 geographiclib==1.50
 geopy==1.22.0
 google-api-core==1.17.0
